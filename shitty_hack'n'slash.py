@@ -62,10 +62,11 @@ class Player(pygame.sprite.Sprite):
 
         self.health = 100
 
-        self.stay_ = True
-        self.death_ = False
-        self.attack_ = False
-        self.run_ = False
+        self.stay = True
+        self.death = False
+        self.revive = False
+        self.attack = False
+        self.run = False
 
     def move(self, movement):
         if not pygame.sprite.spritecollide(self, walls_group, False):
@@ -86,38 +87,53 @@ class Player(pygame.sprite.Sprite):
                 if pygame.sprite.spritecollide(self, walls_group, False):
                     self.rect.x += pl_speed
 
-    def attack(self, pos):
-        self.change_animation(self.sheet_attack2, 8, 1)
-        self.attack_ = True
-        self.stay_ = False
-        self.run_ = False
-        # Bullet(pos)
-        print(pos)
+    def attacking(self, pos):
+        if not self.death:
+            self.change_animation(self.sheet_attack2, 8, 1)
+            self.attack = True
+            self.stay = False
+            self.run = False
+            self.revive = False
+            # Bullet(self, pl_bullets_group, pos)
+            print(pos)
 
-    def stay(self):
-        self.change_animation(self.sheet_idle, 8, 1)
-        self.stay_ = True
-        self.run_ = False
-        self.attack_ = False
+    def stop_attack(self):
+        self.attack = False
 
-    def run(self):
-        self.change_animation(self.sheet_run, 8, 1)
-        self.run_ = True
-        self.stay_ = False
-        self.attack_ = False
+    def staying(self):
+        if not self.death:
+            self.change_animation(self.sheet_idle, 8, 1)
+            self.stay = True
+            self.run = False
+            self.revive = False
 
-    def death(self):
-        self.change_animation(self.sheet_death, 7, 1)
-        self.death_ = True
-        self.stay_ = False
-        self.run_ = False
-        self.attack_ = False
-        self.health = 0
+    def running(self):
+        if not self.death and not self.attack:
+            self.change_animation(self.sheet_run, 8, 1)
+            self.run = True
+            self.stay = False
+            self.revive = False
 
-    def revive(self):
-        self.health = 100
-        self.death_ = False
-        self.stay()
+    def is_alive(self):
+        return not self.death
+
+    def dying(self):
+        if not self.death:
+            self.change_animation(self.sheet_death, 7, 1)
+            self.death = True
+            self.revive = False
+            self.stay = False
+            self.run = False
+            self.attack = False
+
+    def reviving(self):
+        if self.death:
+            if self.cur_frame == len(self.frames) - 1:
+                self.health = 100
+                self.revive = True
+                self.death = False
+                self.change_animation(self.sheet_revive, 2, 1)
+                # self.staying()
 
     def cut_sheet(self, sheet, columns, rows):
         for j in range(rows):
@@ -133,22 +149,29 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         if self.health <= 0:
-            self.death()
-        if self.attack_ and iteration % 2 == 0:
+            self.dying()
+        if self.attack and iteration % 2 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
             if self.cur_frame % len(self.frames) == 0:
+                # Bullet()
                 print(11)
-        elif self.stay_ and iteration % 2 == 0:
+        elif self.stay and iteration % 2 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.run_ and iteration % 3 == 0:
+        elif self.run and iteration % 3 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.death_ and iteration % 3 == 0:
+        elif self.death and iteration % 3 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
+        elif self.revive and iteration % 3 == 0:
+            if self.cur_frame != len(self.frames) - 1:
+                self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+                self.image = self.frames[self.cur_frame]
+            else:
+                self.staying()
 
 
 class Monster(Character):
@@ -157,8 +180,9 @@ class Monster(Character):
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__(all_sprites, bullets_group)
+    def __init__(self, character, ch_group, pos):
+        super().__init__(all_sprites, bullets_group, ch_group)
+        self.character = character
 
 
 class Camera:
@@ -285,6 +309,8 @@ if __name__ == '__main__':
     walls_group = pygame.sprite.Group()
     player_group = pygame.sprite.Group()
     bullets_group = pygame.sprite.Group()
+    pl_bullets_group = pygame.sprite.Group()
+    en_bullets_group = pygame.sprite.Group()
 
     FPS = 60
     clock = pygame.time.Clock()
@@ -300,58 +326,56 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            if event.type == pygame.KEYDOWN and player.death_:
-                if event.key == pygame.K_r:
-                    player.revive()
-            if event.type == pygame.KEYDOWN and not player.death_:
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     keys.add('UP')
-                    if not player.attack_:
-                        player.run()
+                    player.running()
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     keys.add('DOWN')
-                    if not player.attack_:
-                        player.run()
+                    player.running()
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     keys.add('RIGHT')
-                    if not player.attack_:
-                        player.run()
+                    player.running()
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     keys.add('LEFT')
-                    if not player.attack_:
-                        player.run()
+                    player.running()
                 if event.key == pygame.K_q:
-                    player.death()
-            if event.type == pygame.KEYUP and not player.death_:
+                    keys = set()
+                    player.dying()
+                if event.key == pygame.K_r:
+                    player.reviving()
+            if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     keys.discard('UP')
                     if len(keys) == 0:
-                        player.stay()
+                        player.staying()
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     keys.discard('DOWN')
                     if len(keys) == 0:
-                        player.stay()
+                        player.staying()
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     keys.discard('RIGHT')
                     if len(keys) == 0:
-                        player.stay()
+                        player.staying()
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     keys.discard('LEFT')
                     if len(keys) == 0:
-                        player.stay()
-            if event.type == pygame.MOUSEBUTTONDOWN and not player.death_:
+                        player.staying()
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    player.attack(event.pos)
-            if event.type == pygame.MOUSEBUTTONUP and not player.death_:
+                    player.attacking(event.pos)
+            if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
+                    player.stop_attack()
                     if len(keys) == 0:
-                        player.stay()
+                        player.staying()
                     else:
-                        player.run()
+                        player.running()
         camera.update(player)
 
-        for i in keys:
-            player.move(i)
+        if player.is_alive():
+            for k in keys:
+                player.move(k)
         for sprite in all_sprites:
             camera.apply(sprite)
 
