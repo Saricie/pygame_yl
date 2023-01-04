@@ -66,26 +66,34 @@ class Player(pygame.sprite.Sprite):
         self.death = False
         self.revive = False
         self.attack = False
+        self.take_hit = False
         self.run = False
 
     def move(self, movement):
-        if not pygame.sprite.spritecollide(self, walls_group, False):
-            if movement == 'UP':
-                self.rect.y -= pl_speed
-                if pygame.sprite.spritecollide(self, walls_group, False):
+        if movement == 'UP':
+            self.rect.y -= pl_speed
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
                     self.rect.y += pl_speed
-            if movement == 'DOWN':
-                self.rect.y += pl_speed
-                if pygame.sprite.spritecollide(self, walls_group, False):
+                    break
+        if movement == 'DOWN':
+            self.rect.y += pl_speed
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
                     self.rect.y -= pl_speed
-            if movement == 'RIGHT':
-                self.rect.x += pl_speed
-                if pygame.sprite.spritecollide(self, walls_group, False):
+                    break
+        if movement == 'RIGHT':
+            self.rect.x += pl_speed
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
                     self.rect.x -= pl_speed
-            if movement == 'LEFT':
-                self.rect.x -= pl_speed
-                if pygame.sprite.spritecollide(self, walls_group, False):
+                    break
+        if movement == 'LEFT':
+            self.rect.x -= pl_speed
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
                     self.rect.x += pl_speed
+                    break
 
     def attacking(self, pos):
         if not self.death:
@@ -97,6 +105,15 @@ class Player(pygame.sprite.Sprite):
             # Bullet(self, pl_bullets_group, pos)
             print(pos)
 
+    def taking_hit(self):
+        if not self.death:
+            self.change_animation(self.sheet_take_hit, 3, 1)
+            self.health -= 10
+            self.take_hit = True
+            self.stay = False
+            self.run = False
+            self.attack = False
+
     def stop_attack(self):
         self.attack = False
 
@@ -106,6 +123,7 @@ class Player(pygame.sprite.Sprite):
             self.stay = True
             self.run = False
             self.revive = False
+            self.take_hit = False
 
     def running(self):
         if not self.death and not self.attack:
@@ -116,6 +134,9 @@ class Player(pygame.sprite.Sprite):
 
     def is_alive(self):
         return not self.death
+
+    def is_attacking(self):
+        return self.attack
 
     def dying(self):
         if not self.death:
@@ -148,6 +169,7 @@ class Player(pygame.sprite.Sprite):
         self.cur_frame = 0
 
     def update(self):
+        self.mask = pygame.mask.from_surface(self.image)
         if self.health <= 0:
             self.dying()
         if self.attack and iteration % 2 == 0:
@@ -162,16 +184,29 @@ class Player(pygame.sprite.Sprite):
         elif self.run and iteration % 3 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.death and iteration % 3 == 0:
-            if self.cur_frame != len(self.frames) - 1:
-                self.cur_frame = (self.cur_frame + 1) % len(self.frames)
-                self.image = self.frames[self.cur_frame]
-        elif self.revive and iteration % 3 == 0:
+        elif self.take_hit and iteration % 2 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
             else:
-                self.staying()
+                # tt
+                if len(keys):
+                    self.running()
+                else:
+                    self.staying()
+        elif self.death and iteration % 3 == 0:
+            if self.cur_frame != len(self.frames) - 1:
+                self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+                self.image = self.frames[self.cur_frame]
+        elif self.revive and iteration % 4 == 0:
+            if self.cur_frame != len(self.frames) - 1:
+                self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+                self.image = self.frames[self.cur_frame]
+            else:
+                if len(keys):
+                    self.running()
+                else:
+                    self.staying()
 
 
 class Monster(Character):
@@ -344,22 +379,24 @@ if __name__ == '__main__':
                     player.dying()
                 if event.key == pygame.K_r:
                     player.reviving()
+                if event.key == pygame.K_h:
+                    player.taking_hit()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     keys.discard('UP')
-                    if len(keys) == 0:
+                    if not len(keys) and not player.is_attacking():
                         player.staying()
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     keys.discard('DOWN')
-                    if len(keys) == 0:
+                    if not len(keys) and not player.is_attacking():
                         player.staying()
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     keys.discard('RIGHT')
-                    if len(keys) == 0:
+                    if not len(keys) and not player.is_attacking():
                         player.staying()
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     keys.discard('LEFT')
-                    if len(keys) == 0:
+                    if not len(keys) and not player.is_attacking():
                         player.staying()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
