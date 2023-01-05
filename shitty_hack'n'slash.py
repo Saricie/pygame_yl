@@ -3,6 +3,7 @@ import os
 import sys
 
 
+# TILE
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(tiles_group, all_sprites)
@@ -11,6 +12,7 @@ class Tile(pygame.sprite.Sprite):
             TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)
 
 
+# CHARACTER
 class Character(pygame.sprite.Sprite):
     def __init__(self, sheet, columns, rows):
         super().__init__(all_sprites)
@@ -39,21 +41,32 @@ class Character(pygame.sprite.Sprite):
             self.image = self.frames[self.cur_frame]
 
 
+# PLAYER
+# parent-class
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
+    def __init__(self, pos_x, pos_y, ps, s):
         super().__init__(all_sprites, player_group)
 
-        self.sheet_idle = evil_wizard_pl['idle']
-        self.sheet_run = evil_wizard_pl['run']
-        self.sheet_take_hit = evil_wizard_pl['take_hit']
-        self.sheet_death = evil_wizard_pl['death']
-        self.sheet_revive = evil_wizard_pl['revive']
-        self.sheet_attack1 = evil_wizard_pl['attack1']
-        self.sheet_attack2 = evil_wizard_pl['attack2']
-        self.sheets = {}
+        player_set = players_sets[ps]
+        self.sheet_idle = player_set['idle']
+        self.sheet_run = player_set['run']
+        self.sheet_take_hit = player_set['take_hit']
+        self.sheet_death = player_set['death']
+        self.sheet_revive = player_set['revive']
+        self.sheet_attack1 = player_set['attack1']
+        self.sheet_attack2 = player_set['attack2']
 
-        self.rect = pygame.Rect(0, 0, 250, 250)
-        self.change_animation(self.sheet_idle, 8, 1)
+        self.idle_w, self.idle_h = cols_rows[ps][self.sheet_idle]
+        self.run_w, self.run_h = cols_rows[ps][self.sheet_run]
+        self.take_hit_w, self.take_hit_h = cols_rows[ps][self.sheet_take_hit]
+        self.death_w, self.death_h = cols_rows[ps][self.sheet_death]
+        self.revive_w, self.revive_h = cols_rows[ps][self.sheet_revive]
+        self.attack1_w, self.attack1_h = cols_rows[ps][self.sheet_attack1]
+        self.attack2_w, self.attack2_h = cols_rows[ps][self.sheet_attack2]
+
+        w, h = s
+        self.rect = pygame.rect.Rect(0, 0, w, h)
+        self.change_animation(self.sheet_idle, self.idle_w, self.idle_h)
         self.image = self.frames[self.cur_frame]
 
         self.rect = self.image.get_rect().move(
@@ -68,6 +81,7 @@ class Player(pygame.sprite.Sprite):
         self.death = False
         self.revive = False
         self.attack = False
+        self.attack_num = 1
         self.take_hit = False
         self.run = False
 
@@ -97,31 +111,34 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x += PL_SPEED
                     break
 
-    def attacking(self, pos):
-        if not self.death:
-            self.change_animation(self.sheet_attack2, 8, 1)
-            self.attack = True
-            self.stay = False
-            self.run = False
-            self.revive = False
-            # Bullet(self, pl_bullets_group, pos)
-            print(pos)
-
     def taking_hit(self):
         if not self.death:
-            self.change_animation(self.sheet_take_hit, 3, 1)
+            self.change_animation(self.sheet_take_hit, self.take_hit_w, self.take_hit_h)
             self.health -= 10
             self.take_hit = True
             self.stay = False
             self.run = False
             self.attack = False
 
+    def attacking(self, pos):
+        if not self.death:
+            if self.attack_num == 1:
+                self.change_animation(self.sheet_attack1, self.attack1_w, self.attack1_h)
+                self.attack_num = 2
+            elif self.attack_num == 2:
+                self.change_animation(self.sheet_attack2, self.attack2_w, self.attack2_h)
+                self.attack_num = 1
+            self.attack = True
+            self.stay = False
+            self.run = False
+            self.revive = False
+
     def stop_attack(self):
         self.attack = False
 
     def staying(self):
         if not self.death:
-            self.change_animation(self.sheet_idle, 8, 1)
+            self.change_animation(self.sheet_idle, self.idle_w, self.idle_h)
             self.stay = True
             self.run = False
             self.revive = False
@@ -129,7 +146,7 @@ class Player(pygame.sprite.Sprite):
 
     def running(self):
         if not self.death and not self.attack:
-            self.change_animation(self.sheet_run, 8, 1)
+            self.change_animation(self.sheet_run, self.run_w, self.run_h)
             self.run = True
             self.stay = False
             self.revive = False
@@ -142,7 +159,7 @@ class Player(pygame.sprite.Sprite):
 
     def dying(self):
         if not self.death:
-            self.change_animation(self.sheet_death, 7, 1)
+            self.change_animation(self.sheet_death, self.death_w, self.death_h)
             self.death = True
             self.revive = False
             self.stay = False
@@ -155,8 +172,7 @@ class Player(pygame.sprite.Sprite):
                 self.health = 100
                 self.revive = True
                 self.death = False
-                self.change_animation(self.sheet_revive, 2, 1)
-                # self.staying()
+                self.change_animation(self.sheet_revive, self.revive_w, self.revive_h)
 
     def cut_sheet(self, sheet, columns, rows):
         for j in range(rows):
@@ -174,13 +190,9 @@ class Player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         if self.health <= 0:
             self.dying()
-        if self.attack and iteration % 2 == 0:
-            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
-            self.image = self.frames[self.cur_frame]
-            if self.cur_frame % len(self.frames) == 0:
-                # Bullet()
-                print(11)
-        elif self.stay and iteration % 2 == 0:
+        if self.attack:
+            ...
+        elif self.stay and iteration % 3 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
         elif self.run and iteration % 3 == 0:
@@ -211,7 +223,58 @@ class Player(pygame.sprite.Sprite):
                     self.staying()
 
 
+# child-classes:
+class EvilWizard(Player):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y, 'evil_wizard', (250, 250))
+        self.pos = (0, 0)
+
+    def attacking(self, pos):
+        super().attacking(pos)
+        if not self.death:
+            self.pos = pos
+
+    def update(self):
+        super().update()
+        if self.attack and iteration % 2 == 0:
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = self.frames[self.cur_frame]
+            if self.cur_frame % len(self.frames) == 0:
+                # Bullet(self.pos)
+                print(self.pos)
+
+
+class MartialHero(Player):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y, 'martial_hero', (200, 200))
+
+    def update(self):
+        super().update()
+        if self.attack and iteration % 3 == 0:
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = self.frames[self.cur_frame]
+            # collide
+
+
+# MONSTERS
+# parent-class
 class Monster(Character):
+    def __init__(self, sheet, columns, rows):
+        super().__init__(sheet, columns, rows)
+
+
+# child-classes:
+class Goblin(Monster):
+    def __init__(self, sheet, columns, rows):
+        super().__init__(sheet, columns, rows)
+
+
+class Skeleton(Monster):
+    def __init__(self, sheet, columns, rows):
+        super().__init__(sheet, columns, rows)
+
+
+class Mushroom(Monster):
     def __init__(self, sheet, columns, rows):
         super().__init__(sheet, columns, rows)
 
@@ -262,7 +325,7 @@ def load_level(filename):
         max_width = max(map(len, level_map))
 
         return list(map(lambda x: x.ljust(max_width, '.'), level_map))
-    except:
+    except Exception:
         print('Неправильный файл')
         terminate()
 
@@ -275,9 +338,21 @@ def generate_level(level):
                 Tile('empty', x, y)
             elif level[y][x] == '#':
                 Tile('wall', x, y).add(walls_group)
-            elif level[y][x] == '@':
+            elif level[y][x] == 'W':
                 Tile('empty', x, y)
-                new_player = Player(x, y)
+                new_player = EvilWizard(x, y)
+            elif level[y][x] == 'M':
+                Tile('empty', x, y)
+                new_player = MartialHero(x, y)
+            elif level[y][x] == 'm':
+                Tile('empty', x, y)
+                new_player = Mushroom(..., ..., ...)
+            elif level[y][x] == 'g':
+                Tile('empty', x, y)
+                new_player = Goblin(..., ..., ...)
+            elif level[y][x] == 's':
+                Tile('empty', x, y)
+                new_player = Skeleton(..., ..., ...)
     return new_player, x, y
 
 
@@ -399,6 +474,30 @@ if __name__ == '__main__':
         'trash_monster': trash_monster_m,
         'demon': demon_m,
         'ghost': ghost_m
+    }
+
+    # COLUMNS-ROWS LISTS FOR SPRITES
+    ew_cols_rows = {
+        evil_wizard_pl['idle']: (8, 1),
+        evil_wizard_pl['run']: (8, 1),
+        evil_wizard_pl['attack1']: (8, 1),
+        evil_wizard_pl['attack2']: (8, 1),
+        evil_wizard_pl['take_hit']: (3, 1),
+        evil_wizard_pl['death']: (7, 1),
+        evil_wizard_pl['revive']: (2, 1)
+    }
+    mh_cols_rows = {
+        martial_hero_pl['idle']: (4, 1),
+        martial_hero_pl['run']: (8, 1),
+        martial_hero_pl['attack1']: (4, 1),
+        martial_hero_pl['attack2']: (4, 1),
+        martial_hero_pl['take_hit']: (3, 1),
+        martial_hero_pl['death']: (7, 1),
+        martial_hero_pl['revive']: (2, 1)
+    }
+    cols_rows = {
+        'evil_wizard': ew_cols_rows,
+        'martial_hero': mh_cols_rows
     }
 
     # SPRITE GROUPS
