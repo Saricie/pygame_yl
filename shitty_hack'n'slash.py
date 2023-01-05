@@ -14,8 +14,11 @@ class Tile(pygame.sprite.Sprite):
 
 # CHARACTER
 class Character(pygame.sprite.Sprite):
-    def __init__(self, sheet, columns, rows):
-        super().__init__(all_sprites)
+    def __init__(self, groups, pos_x, pos_y, ps, s, speed):
+        super().__init__(all_sprites, characters_group)
+        for g in groups:
+            self.add(g)
+
         self.change_animation(load_image("mario.png"), 1, 1)
         self.image = self.frames[self.cur_frame]
         self.mask = pygame.mask.from_surface(self.image)
@@ -44,8 +47,8 @@ class Character(pygame.sprite.Sprite):
 # PLAYER
 # parent-class
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, ps, s):
-        super().__init__(all_sprites, player_group)
+    def __init__(self, pos_x, pos_y, ps, s, hp):
+        super().__init__(all_sprites, characters_group, player_group)
 
         player_set = players_sets[ps]
         self.sheet_idle = player_set['idle']
@@ -75,7 +78,7 @@ class Player(pygame.sprite.Sprite):
         self.pos_x = pos_x
         self.pos_y = pos_y
 
-        self.health = 100
+        self.health = hp
 
         self.stay = True
         self.death = False
@@ -226,7 +229,7 @@ class Player(pygame.sprite.Sprite):
 # child-classes:
 class EvilWizard(Player):
     def __init__(self, pos_x, pos_y):
-        super().__init__(pos_x, pos_y, 'evil_wizard', (250, 250))
+        super().__init__(pos_x, pos_y, 'evil_wizard', (250, 250), 100)
         self.pos = (0, 0)
 
     def attacking(self, pos):
@@ -246,7 +249,7 @@ class EvilWizard(Player):
 
 class MartialHero(Player):
     def __init__(self, pos_x, pos_y):
-        super().__init__(pos_x, pos_y, 'martial_hero', (200, 200))
+        super().__init__(pos_x, pos_y, 'martial_hero', (200, 200), 120)
 
     def update(self):
         super().update()
@@ -258,25 +261,170 @@ class MartialHero(Player):
 
 # MONSTERS
 # parent-class
-class Monster(Character):
-    def __init__(self, sheet, columns, rows):
-        super().__init__(sheet, columns, rows)
+class Monster(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, ps, s, hp):
+        super().__init__(all_sprites, characters_group, monsters_group)
+
+        monster_set = monsters_sets[ps]
+        self.sheet_idle = monster_set['idle']
+        self.sheet_run = monster_set['run']
+        self.sheet_take_hit = monster_set['take_hit']
+        self.sheet_death = monster_set['death']
+
+        self.idle_w, self.idle_h = cols_rows[ps][self.sheet_idle]
+        self.run_w, self.run_h = cols_rows[ps][self.sheet_run]
+        self.take_hit_w, self.take_hit_h = cols_rows[ps][self.sheet_take_hit]
+        self.death_w, self.death_h = cols_rows[ps][self.sheet_death]
+
+        self.stay = True
+        self.death = False
+        self.take_hit = False
+        self.run = False
+
+        w, h = s
+        self.rect = pygame.rect.Rect(0, 0, w, h)
+        self.staying()
+        self.image = self.frames[self.cur_frame]
+
+        self.rect = self.image.get_rect().move(
+            TILE_WIDTH * pos_x + 15, TILE_HEIGHT * pos_y + 5)
+        self.mask = pygame.mask.from_surface(self.image)
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+
+        self.health = hp
+        self.movements = set()
+
+    def dying(self):
+        if not self.death:
+            self.change_animation(self.sheet_death, self.death_w, self.death_h)
+            self.death = True
+            self.stay = False
+            self.run = False
+
+    def taking_hit(self):
+        if not self.death:
+            self.change_animation(self.sheet_take_hit, self.take_hit_w, self.take_hit_h)
+            self.health -= 10
+            self.take_hit = True
+            self.stay = False
+            self.run = False
+
+    def staying(self):
+        if not self.death:
+            self.change_animation(self.sheet_idle, self.idle_w, self.idle_h)
+            self.stay = True
+            self.run = False
+            self.take_hit = False
+
+    def running(self):
+        if not self.death:
+            self.change_animation(self.sheet_run, self.run_w, self.run_h)
+            self.run = True
+            self.stay = False
+
+    def is_alive(self):
+        return not self.death
+
+    def move(self, movement):
+        if movement == 'UP':
+            self.rect.y -= M_SPEED
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
+                    self.rect.y += M_SPEED
+                    break
+        if movement == 'DOWN':
+            self.rect.y += M_SPEED
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
+                    self.rect.y -= M_SPEED
+                    break
+        if movement == 'RIGHT':
+            self.rect.x += M_SPEED
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
+                    self.rect.x -= M_SPEED
+                    break
+        if movement == 'LEFT':
+            self.rect.x -= M_SPEED
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
+                    self.rect.x += M_SPEED
+                    break
+        self.running()
+
+    def cut_sheet(self, sheet, columns, rows):
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
+
+    def change_animation(self, sheet, columns, rows):
+        self.frames = []
+        self.cut_sheet(sheet, columns, rows)
+        self.cur_frame = 0
+
+    def update(self):
+        self.mask = pygame.mask.from_surface(self.image)
+
+        if self.is_alive():
+            pl_x = player.rect.x + player.rect.w // 2
+            pl_y = player.rect.y + player.rect.h // 2
+            m_x = self.rect.x + self.rect.w // 2
+            m_y = self.rect.y + self.rect.h // 2
+
+            if m_x < pl_x:
+                self.movements.add('RIGHT')
+            elif m_x > pl_x:
+                self.movements.add('LEFT')
+            if m_y < pl_y:
+                self.movements.add('DOWN')
+            elif m_y > pl_y:
+                self.movements.add('UP')
+            for m in self.movements:
+                self.move(m)
+
+        if self.health <= 0:
+            self.dying()
+        if self.stay and iteration % 2 == 0:
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = self.frames[self.cur_frame]
+        elif self.run and iteration % 2 == 0:
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = self.frames[self.cur_frame]
+        elif self.take_hit and iteration % 2 == 0:
+            if self.cur_frame != len(self.frames) - 1:
+                self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+                self.image = self.frames[self.cur_frame]
+            else:
+                if len(self.movements):
+                    self.running()
+                else:
+                    self.staying()
+        elif self.death and iteration % 3 == 0:
+            if self.cur_frame != len(self.frames) - 1:
+                self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+                self.image = self.frames[self.cur_frame]
+            elif self.cur_frame != len(self.frames) + 2:
+                # self.kill()
+                ...
 
 
 # child-classes:
 class Goblin(Monster):
-    def __init__(self, sheet, columns, rows):
-        super().__init__(sheet, columns, rows)
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y, 'goblin', (150, 150), 30)
 
 
 class Skeleton(Monster):
-    def __init__(self, sheet, columns, rows):
-        super().__init__(sheet, columns, rows)
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y, 'skeleton', (150, 150), 30)
 
 
 class Mushroom(Monster):
-    def __init__(self, sheet, columns, rows):
-        super().__init__(sheet, columns, rows)
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y, 'mushroom', (150, 150), 40)
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -332,6 +480,7 @@ def load_level(filename):
 
 def generate_level(level):
     new_player, x, y = None, None, None
+    monsters = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
@@ -346,14 +495,14 @@ def generate_level(level):
                 new_player = MartialHero(x, y)
             elif level[y][x] == 'm':
                 Tile('empty', x, y)
-                new_player = Mushroom(..., ..., ...)
+                monsters.append(Mushroom(x, y))
             elif level[y][x] == 'g':
-                Tile('empty', x, y)
-                new_player = Goblin(..., ..., ...)
+                # Tile('empty', x, y)
+                monsters.append(Goblin(x, y))
             elif level[y][x] == 's':
                 Tile('empty', x, y)
-                new_player = Skeleton(..., ..., ...)
-    return new_player, x, y
+                monsters.append(Skeleton(x, y))
+    return new_player, x, y, monsters
 
 
 def terminate():
@@ -462,9 +611,9 @@ if __name__ == '__main__':
     }
     ghost_m = {
         'idle': load_image('ghost_idle.png'),
-        'run': load_image('demon_idle.png'),
-        'take_hit': load_image('demon_idle.png'),
-        'death': load_image('demon_idle.png')
+        'run': load_image('ghost_idle.png'),
+        'take_hit': load_image('ghost_idle.png'),
+        'death': load_image('ghost_idle.png')
     }
     trash_monster_m = load_image("trash_monster_sheet.png")
     monsters_sets = {
@@ -495,9 +644,45 @@ if __name__ == '__main__':
         martial_hero_pl['death']: (7, 1),
         martial_hero_pl['revive']: (2, 1)
     }
+    g_cols_rows = {
+        goblin_m['idle']: (4, 1),
+        goblin_m['run']: (8, 1),
+        goblin_m['take_hit']: (4, 1),
+        goblin_m['death']: (4, 1)
+    }
+    s_cols_rows = {
+        skeleton_m['idle']: (4, 1),
+        skeleton_m['run']: (4, 1),
+        skeleton_m['take_hit']: (4, 1),
+        skeleton_m['death']: (4, 1)
+    }
+    m_cols_rows = {
+        mushroom_m['idle']: (4, 1),
+        mushroom_m['run']: (8, 1),
+        mushroom_m['take_hit']: (4, 1),
+        mushroom_m['death']: (4, 1)
+    }
+    d_cols_rows = {
+        demon_m['idle']: (6, 1),
+        demon_m['run']: (6, 1),
+        demon_m['take_hit']: (6, 1),
+        demon_m['death']: (6, 1),
+        demon_m['attack']: (11, 1)
+    }
+    gh_cols_rows = {
+        goblin_m['idle']: (7, 1),
+        goblin_m['run']: (7, 1),
+        goblin_m['take_hit']: (7, 1),
+        goblin_m['death']: (7, 1)
+    }
     cols_rows = {
         'evil_wizard': ew_cols_rows,
-        'martial_hero': mh_cols_rows
+        'martial_hero': mh_cols_rows,
+        'goblin': g_cols_rows,
+        'skeleton': s_cols_rows,
+        'mushroom': m_cols_rows,
+        'demon': d_cols_rows,
+        'ghost': gh_cols_rows
     }
 
     # SPRITE GROUPS
@@ -520,6 +705,7 @@ if __name__ == '__main__':
     # CONSTANTS
     TILE_WIDTH = TILE_HEIGHT = 50
     PL_SPEED = 3
+    M_SPEED = 2
 
     # time
     FPS = 60
@@ -531,7 +717,7 @@ if __name__ == '__main__':
 
     # LOADING MAP AND PLAYER INITIALIZATION
     level_map = load_level('map2.txt')
-    player, level_x, level_y = generate_level(level_map)
+    player, level_x, level_y, monsters = generate_level(level_map)
 
     # MENU
     start_screen()
