@@ -795,7 +795,7 @@ if __name__ == '__main__':
 
         all_sprites.update()
         all_sprites.draw(screen)
-        player_group.draw(screen)
+        characters_group.draw(screen)
         iteration += 1
 
         pygame.display.flip()
