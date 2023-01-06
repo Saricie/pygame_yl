@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Подготовлен класс Monster, взаимодействие игрока с монстром">
+      <change afterPath="$PROJECT_DIR$/data/menu.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/map2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/night_town_background.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/night_town_background.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,11 +34,11 @@
       <recent name="C:\Users\1\Desktop\Проект PyGame" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\1\Desktop\Проект PyGame" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data\skeleton" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data\Goblin" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data\Mushroom" />
-      <recent name="C:\Users\1\Desktop\Проект PyGame\data\Skeleton" />
     </key>
   </component>
   <component name="RunManager">
@@ -149,7 +148,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672999329333</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Подготовлен класс Monster, взаимодействие игрока с монстром">
+      <created>1673017113038</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1673017113038</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
