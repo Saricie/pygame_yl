@@ -450,6 +450,16 @@ class Mushroom(Monster):
         super().__init__(pos_x, pos_y, 'mushroom', (150, 150), 40)
 
 
+class Ghost(Monster):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y, 'ghost', (64, 80), 20)
+
+
+class Demon(Monster):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y, 'demon', (160, 144), 100)
+
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, character, ch_group, pos):
         super().__init__(all_sprites, bullets_group, ch_group)
@@ -525,6 +535,12 @@ def generate_level(level):
             elif level[y][x] == 's':
                 Tile('empty', x, y)
                 monsters.append(Skeleton(x, y))
+            elif level[y][x] == 'h':
+                Tile('empty', x, y)
+                monsters.append(Ghost(x, y))
+            elif level[y][x] == 'd':
+                Tile('empty', x, y)
+                monsters.append(Demon(x, y))
     return new_player, x, y, monsters
 
 
@@ -533,14 +549,14 @@ def terminate():
     sys.exit()
 
 
-def start_screen():
-    intro_text = ["ЗАСТАВКА", "",
+def menu():
+    intro_text = ["{Название игры придумать}", "",
                   "Правила игры",
                   "Если в правилах несколько строк,",
                   "приходится выводить их построчно"]
 
-    fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
-    screen.blit(fon, (0, 0))
+    menu_background = pygame.transform.scale(load_image('night_town_background.png'), (WIDTH, HEIGHT))
+    screen.blit(menu_background, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
     for line in intro_text:
@@ -567,8 +583,8 @@ if __name__ == '__main__':
     # INITIALIZATION
     pygame.init()
     # pygame.key.set_repeat(200, 70)
-    size = WIDTH, HEIGHT = 500, 500
-    screen = pygame.display.set_mode(size)
+    size = WIDTH, HEIGHT = (1080, 600)
+    screen = pygame.display.set_mode(size, pygame.RESIZABLE)
     pygame.display.set_caption('Shitty Hack\'n\'Slash')
 
     # SPRITE SETS
@@ -693,10 +709,10 @@ if __name__ == '__main__':
         demon_m['attack']: (11, 1)
     }
     gh_cols_rows = {
-        goblin_m['idle']: (7, 1),
-        goblin_m['run']: (7, 1),
-        goblin_m['take_hit']: (7, 1),
-        goblin_m['death']: (7, 1)
+        ghost_m['idle']: (7, 1),
+        ghost_m['run']: (7, 1),
+        ghost_m['take_hit']: (7, 1),
+        ghost_m['death']: (7, 1)
     }
     cols_rows = {
         'evil_wizard': ew_cols_rows,
@@ -743,7 +759,7 @@ if __name__ == '__main__':
     player, level_x, level_y, monsters = generate_level(level_map)
 
     # MENU
-    start_screen()
+    menu()
 
     # GAME BEGIN
     keys = set()
