@@ -1,4 +1,5 @@
 import pygame
+# import pygame_gui
 import os
 import sys
 
@@ -10,6 +11,23 @@ class Tile(pygame.sprite.Sprite):
         self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(
             TILE_WIDTH * pos_x, TILE_HEIGHT * pos_y)
+
+
+# BORDER
+class Border(pygame.sprite.Sprite): # ttt
+    # строго вертикальный или строго горизонтальный отрезок
+    def __init__(self, x1, y1, x2, y2):
+        super().__init__(all_sprites, all_borders)
+        if x1 == x2:  # вертикальная стенка
+            self.add(vertical_borders)
+            self.image = pygame.Surface([1, y2 - y1])
+            self.image.fill((255, 255, 255))
+            self.rect = pygame.Rect(x1, y1, 1, y2 - y1)
+        else:  # горизонтальная стенка
+            self.add(horizontal_borders)
+            self.image = pygame.Surface([x2 - x1, 1])
+            self.image.fill((255, 255, 255))
+            self.rect = pygame.Rect(x1, y1, x2 - x1, 1)
 
 
 # CHARACTER
@@ -58,28 +76,46 @@ class Character(pygame.sprite.Sprite):
     def move(self, movement):
         if movement == 'UP':
             self.rect.y -= self.speed
-            for wall in walls_group:
-                if pygame.sprite.collide_mask(self, wall):
-                    self.rect.y += self.speed
-                    break
+            ''''if not pygame.sprite.spritecollide(self, horizontal_borders, False):
+                for border in horizontal_borders:
+                    if not pygame.sprite.collide_mask(self, border):
+                        self.rect.y -= self.speed
+                for wall in walls_group:
+                    if pygame.sprite.collide_mask(self, wall):
+                        self.rect.y += self.speed
+                        break
+            else:
+                self.rect.y += self.speed'''
         if movement == 'DOWN':
             self.rect.y += self.speed
-            for wall in walls_group:
-                if pygame.sprite.collide_mask(self, wall):
-                    self.rect.y -= self.speed
-                    break
+            '''if not pygame.sprite.spritecollide(self, horizontal_borders, False):
+                self.rect.y += self.speed
+                for wall in walls_group:
+                    if pygame.sprite.collide_mask(self, wall):
+                        self.rect.y -= self.speed
+                        break
+            else:
+                self.rect.y -= self.speed'''
         if movement == 'RIGHT':
             self.rect.x += self.speed
-            for wall in walls_group:
-                if pygame.sprite.collide_mask(self, wall):
-                    self.rect.x -= self.speed
-                    break
+            '''if not pygame.sprite.spritecollide(self, vertical_borders, False):
+                self.rect.x += self.speed
+                for wall in walls_group:
+                    if pygame.sprite.collide_mask(self, wall):
+                        self.rect.x -= self.speed
+                        break
+            else:
+                self.rect.x -= self.speed'''
         if movement == 'LEFT':
             self.rect.x -= self.speed
-            for wall in walls_group:
-                if pygame.sprite.collide_mask(self, wall):
-                    self.rect.x += self.speed
-                    break
+            '''if not pygame.sprite.spritecollide(self, vertical_borders, False):
+                self.rect.x -= self.speed
+                for wall in walls_group:
+                    if pygame.sprite.collide_mask(self, wall):
+                        self.rect.x += self.speed
+                        break
+            else:
+                self.rect.x += self.speed'''
 
     def taking_hit(self):
         if not self.death:
@@ -464,8 +500,9 @@ def load_level(filename):
             level_map = [line.strip() for line in mapFile]
 
         max_width = max(map(len, level_map))
+        max_height = len(level_map)
 
-        return list(map(lambda x: x.ljust(max_width, '.'), level_map))
+        return list(map(lambda x: x.ljust(max_width, '.'), level_map)), max_width, max_height
     except Exception:
         print('Неправильный файл')
         terminate()
@@ -488,19 +525,23 @@ def generate_level(level):
                 new_player = MartialHero(x, y)
             elif level[y][x] == 'm':
                 Tile('empty', x, y)
-                monsters.append(Mushroom(x, y))
+                monsters.append((Mushroom, x, y))
             elif level[y][x] == 'g':
                 Tile('empty', x, y)
-                monsters.append(Goblin(x, y))
+                monsters.append((Goblin, x, y))
             elif level[y][x] == 's':
                 Tile('empty', x, y)
-                monsters.append(Skeleton(x, y))
+                monsters.append((Skeleton, x, y))
             elif level[y][x] == 'h':
                 Tile('empty', x, y)
-                monsters.append(Ghost(x, y))
+                monsters.append((Ghost, x, y))
             elif level[y][x] == 'd':
                 Tile('empty', x, y)
-                monsters.append(Demon(x, y))
+                Demon(x, y)
+    Border(0, 0, TOTAL_WIDTH, 0)
+    Border(0, TOTAL_HEIGHT, TOTAL_WIDTH, TOTAL_HEIGHT)
+    Border(0, 0, 0, TOTAL_HEIGHT)
+    Border(TOTAL_WIDTH, 0, TOTAL_WIDTH, TOTAL_HEIGHT)
     return new_player, x, y, monsters
 
 
@@ -736,9 +777,12 @@ if __name__ == '__main__':
     # SPRITE GROUPS
     all_sprites = pygame.sprite.Group()
 
-    # tiles groups
+    # tiles and borders groups
     tiles_group = pygame.sprite.Group()
     walls_group = pygame.sprite.Group()
+    horizontal_borders = pygame.sprite.Group()
+    vertical_borders = pygame.sprite.Group()
+    all_borders = pygame.sprite.Group()
 
     # characters groups
     characters_group = pygame.sprite.Group()
@@ -750,10 +794,17 @@ if __name__ == '__main__':
     pl_bullets_group = pygame.sprite.Group()
     en_bullets_group = pygame.sprite.Group()
 
+    # LOADING MAP AND PLAYER INITIALIZATION
+    level_map, max_width, max_height = load_level('map2.txt')
+
     # CONSTANTS
     TILE_WIDTH = TILE_HEIGHT = 50
+    TOTAL_WIDTH = TILE_WIDTH * max_width
+    TOTAL_HEIGHT = TILE_HEIGHT * max_height
     PL_SPEED = 3
     M_SPEED = 2
+
+    player, level_x, level_y, monsters = generate_level(level_map)
 
     # time
     FPS = 60
@@ -762,10 +813,6 @@ if __name__ == '__main__':
 
     # CAMERA INITIALIZATION
     camera = Camera()
-
-    # LOADING MAP AND PLAYER INITIALIZATION
-    level_map = load_level('map2.txt')
-    player, level_x, level_y, monsters = generate_level(level_map)
 
     # MENU
     menu()
@@ -844,6 +891,11 @@ if __name__ == '__main__':
         # camera
         for sprite in all_sprites:
             camera.apply(sprite)
+
+        # monsters spawn
+        if iteration % 150 == 0 and len(monsters_group) <= 6 and player.is_alive():
+            for M, x, y in monsters:
+                M(x, y)
 
         # iteration and updating
         screen.fill((0, 0, 0))

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="класс Character">
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Обновлены анимации, зеркальное отражение относительно направления взгляда персонажа">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -12,6 +13,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="2JoOmAgT6x3bg1soq6XyBn5R0SV" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -161,7 +170,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673041117644</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Обновлены анимации, зеркальное отражение относительно направления взгляда персонажа">
+      <created>1673086134654</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1673086134654</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -186,6 +202,7 @@
     <MESSAGE value="Начат класс Monster" />
     <MESSAGE value="Подготовлен класс Monster, взаимодействие игрока с монстром" />
     <MESSAGE value="класс Character" />
-    <option name="LAST_COMMIT_MESSAGE" value="класс Character" />
+    <MESSAGE value="Обновлены анимации, зеркальное отражение относительно направления взгляда персонажа" />
+    <option name="LAST_COMMIT_MESSAGE" value="Обновлены анимации, зеркальное отражение относительно направления взгляда персонажа" />
   </component>
 </project>
