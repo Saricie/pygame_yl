@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Подготовлен класс Monster, взаимодействие игрока с монстром">
-      <change afterPath="$PROJECT_DIR$/data/menu.json" afterDir="false" />
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="класс Character">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
     </list>
@@ -155,7 +154,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673017113038</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="класс Character">
+      <created>1673041117643</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1673041117644</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -179,6 +185,7 @@
     <MESSAGE value="Переделан класс Player. Добавлены несколько сетов персонажей." />
     <MESSAGE value="Начат класс Monster" />
     <MESSAGE value="Подготовлен класс Monster, взаимодействие игрока с монстром" />
-    <option name="LAST_COMMIT_MESSAGE" value="Подготовлен класс Monster, взаимодействие игрока с монстром" />
+    <MESSAGE value="класс Character" />
+    <option name="LAST_COMMIT_MESSAGE" value="класс Character" />
   </component>
 </project>

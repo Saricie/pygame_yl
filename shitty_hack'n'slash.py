@@ -22,6 +22,10 @@ class Character(pygame.sprite.Sprite):
         self.sheet_run = ch_set['run']
         self.sheet_take_hit = ch_set['take_hit']
         self.sheet_death = ch_set['death']
+        self.sheet_idle_f = ch_set['idle_f']
+        self.sheet_run_f = ch_set['run_f']
+        self.sheet_take_hit_f = ch_set['take_hit_f']
+        self.sheet_death_f = ch_set['death_f']
 
         self.idle_w, self.idle_h = cols_rows[ch_s][self.sheet_idle]
         self.run_w, self.run_h = cols_rows[ch_s][self.sheet_run]
@@ -32,6 +36,7 @@ class Character(pygame.sprite.Sprite):
         self.death = False
         self.take_hit = False
         self.run = False
+        self.flipped = False
 
         w, h = ch_size
         self.rect = pygame.rect.Rect(0, 0, w, h)
@@ -48,6 +53,7 @@ class Character(pygame.sprite.Sprite):
         self.max_hp = hp
         self.health = hp
         self.speed = speed
+        self.pos = (0, 0)
 
     def move(self, movement):
         if movement == 'UP':
@@ -77,7 +83,10 @@ class Character(pygame.sprite.Sprite):
 
     def taking_hit(self):
         if not self.death:
-            self.change_animation(self.sheet_take_hit, self.take_hit_w, self.take_hit_h)
+            if not self.flipped:
+                self.change_animation(self.sheet_take_hit, self.take_hit_w, self.take_hit_h)
+            else:
+                self.change_animation(self.sheet_take_hit_f, self.take_hit_w, self.take_hit_h, True)
             self.health -= 10
             self.take_hit = True
             self.stay = False
@@ -85,37 +94,62 @@ class Character(pygame.sprite.Sprite):
 
     def dying(self):
         if not self.death:
-            self.change_animation(self.sheet_death, self.death_w, self.death_h)
+            if not self.flipped:
+                self.change_animation(self.sheet_death, self.death_w, self.death_h)
+            else:
+                self.change_animation(self.sheet_death_f, self.death_w, self.death_h, True)
             self.death = True
             self.stay = False
             self.run = False
 
     def staying(self):
         if not self.death:
-            self.change_animation(self.sheet_idle, self.idle_w, self.idle_h)
+            if not self.flipped:
+                self.change_animation(self.sheet_idle, self.idle_w, self.idle_h)
+            else:
+                self.change_animation(self.sheet_idle_f, self.idle_w, self.idle_h, True)
             self.stay = True
             self.run = False
             self.take_hit = False
 
     def running(self):
         if not self.death:
-            self.change_animation(self.sheet_run, self.run_w, self.run_h)
+            if not self.flipped:
+                self.change_animation(self.sheet_run, self.run_w, self.run_h)
+            else:
+                self.change_animation(self.sheet_run_f, self.run_w, self.run_h, True)
             self.run = True
             self.stay = False
 
     def is_alive(self):
         return not self.death
 
-    def cut_sheet(self, sheet, columns, rows):
+    def flip(self):
+        self.flipped = not self.flipped
+        if self.run:
+            self.running()
+        elif self.stay:
+            self.staying()
+        elif self.take_hit:
+            self.taking_hit()
+        elif self.death:
+            self.dying()
+
+    def is_flipped(self):
+        return self.flipped
+
+    def cut_sheet(self, sheet, columns, rows, is_flipped=False):
         for j in range(rows):
             for i in range(columns):
                 frame_location = (self.rect.w * i, self.rect.h * j)
                 self.frames.append(sheet.subsurface(pygame.Rect(
                     frame_location, self.rect.size)))
+        if is_flipped:
+            self.frames = self.frames[::-1]
 
-    def change_animation(self, sheet, columns, rows):
+    def change_animation(self, sheet, columns, rows, is_flipped=False):
         self.frames = []
-        self.cut_sheet(sheet, columns, rows)
+        self.cut_sheet(sheet, columns, rows, is_flipped)
         self.cur_frame = 0
 
     def update(self):
@@ -138,11 +172,13 @@ class Player(Character):
         self.sheet_revive = player_set['revive']
         self.sheet_attack1 = player_set['attack1']
         self.sheet_attack2 = player_set['attack2']
+        self.sheet_revive_f = player_set['revive_f']
+        self.sheet_attack1_f = player_set['attack1_f']
+        self.sheet_attack2_f = player_set['attack2_f']
 
         self.revive_w, self.revive_h = cols_rows[pl_s][self.sheet_revive]
         self.attack1_w, self.attack1_h = cols_rows[pl_s][self.sheet_attack1]
         self.attack2_w, self.attack2_h = cols_rows[pl_s][self.sheet_attack2]
-        self.pos = (0, 0)
 
     def taking_hit(self):
         super().taking_hit()
@@ -152,10 +188,16 @@ class Player(Character):
     def attacking(self, pos):
         if not self.death:
             if self.attack_num == 1:
-                self.change_animation(self.sheet_attack1, self.attack1_w, self.attack1_h)
+                if not self.flipped:
+                    self.change_animation(self.sheet_attack1, self.attack1_w, self.attack1_h)
+                else:
+                    self.change_animation(self.sheet_attack1_f, self.attack1_w, self.attack1_h, True)
                 self.attack_num = 2
             elif self.attack_num == 2:
-                self.change_animation(self.sheet_attack2, self.attack2_w, self.attack2_h)
+                if not self.flipped:
+                    self.change_animation(self.sheet_attack2, self.attack2_w, self.attack2_h)
+                else:
+                    self.change_animation(self.sheet_attack2_f, self.attack2_w, self.attack2_h, True)
                 self.attack_num = 1
             self.attack = True
             self.stay = False
@@ -174,8 +216,11 @@ class Player(Character):
             self.revive = False
 
     def running(self):
-        if not self.death and not self.attack:
-            self.change_animation(self.sheet_run, self.run_w, self.run_h)
+        if not self.death and not self.is_attacking():
+            if not self.flipped:
+                self.change_animation(self.sheet_run, self.run_w, self.run_h)
+            else:
+                self.change_animation(self.sheet_run_f, self.run_w, self.run_h, True)
             self.run = True
             self.stay = False
             self.revive = False
@@ -192,7 +237,10 @@ class Player(Character):
                 self.health = self.max_hp
                 self.revive = True
                 self.death = False
-                self.change_animation(self.sheet_revive, self.revive_w, self.revive_h)
+                if not self.flipped:
+                    self.change_animation(self.sheet_revive, self.revive_w, self.revive_h)
+                else:
+                    self.change_animation(self.sheet_revive_f, self.revive_w, self.revive_h, True)
 
     def update(self):
         super().update()
@@ -303,10 +351,14 @@ class Monster(Character): # переделать move, movements и анимац
             if m_x < pl_x:
                 self.right = True
                 self.left = False
+                if self.flipped:
+                    self.flip()
                 self.move('RIGHT')
             elif m_x > pl_x:
                 self.right = False
                 self.left = True
+                if not self.flipped:
+                    self.flip()
                 self.move('LEFT')
             if m_y < pl_y:
                 self.down = True
@@ -548,34 +600,55 @@ if __name__ == '__main__':
     # как у игроков
     goblin_m = {
         'idle': load_image('goblin_idle.png'),
+        'idle_f': pygame.transform.flip(load_image('goblin_idle.png'), True, False),
         'run': load_image('goblin_run.png'),
+        'run_f': pygame.transform.flip(load_image('goblin_run.png'), True, False),
         'take_hit': load_image('goblin_take_hit.png'),
-        'death': load_image('goblin_death.png')
+        'take_hit_f': pygame.transform.flip(load_image('goblin_take_hit.png'), True, False),
+        'death': load_image('goblin_death.png'),
+        'death_f': pygame.transform.flip(load_image('goblin_death.png'), True, False)
     }
     skeleton_m = {
         'idle': load_image('skeleton_idle.png'),
+        'idle_f': pygame.transform.flip(load_image('skeleton_idle.png'), True, False),
         'run': load_image('skeleton_run.png'),
+        'run_f': pygame.transform.flip(load_image('skeleton_run.png'), True, False),
         'take_hit': load_image('skeleton_take_hit.png'),
-        'death': load_image('skeleton_death.png')
+        'take_hit_f': pygame.transform.flip(load_image('skeleton_take_hit.png'), True, False),
+        'death': load_image('skeleton_death.png'),
+        'death_f': pygame.transform.flip(load_image('skeleton_death.png'), True, False)
     }
     mushroom_m = {
         'idle': load_image('mushroom_idle.png'),
+        'idle_f': pygame.transform.flip(load_image('mushroom_idle.png'), True, False),
         'run': load_image('mushroom_run.png'),
+        'run_f': pygame.transform.flip(load_image('mushroom_run.png'), True, False),
         'take_hit': load_image('mushroom_take_hit.png'),
-        'death': load_image('mushroom_death.png')
+        'take_hit_f': pygame.transform.flip(load_image('mushroom_take_hit.png'), True, False),
+        'death': load_image('mushroom_death.png'),
+        'death_f': pygame.transform.flip(load_image('mushroom_death.png'), True, False)
     }
     demon_m = {
-        'idle': load_image('demon_idle.png'),
-        'run': load_image('demon_idle.png'),
-        'take_hit': load_image('demon_idle.png'),
-        'death': load_image('demon_idle.png'),
-        'attack': load_image('demon_attack_breath.png')
+        'idle_f': load_image('demon_idle.png'),
+        'idle': pygame.transform.flip(load_image('demon_idle.png'), True, False),
+        'run_f': load_image('demon_idle.png'),
+        'run': pygame.transform.flip(load_image('demon_idle.png'), True, False),
+        'take_hit_f': load_image('demon_idle.png'),
+        'take_hit': pygame.transform.flip(load_image('demon_idle.png'), True, False),
+        'death_f': load_image('demon_idle.png'),
+        'death': pygame.transform.flip(load_image('demon_idle.png'), True, False),
+        'attack_f': load_image('demon_attack_breath.png'),
+        'attack': pygame.transform.flip(load_image('demon_attack_breath.png'), True, False),
     }
     ghost_m = {
-        'idle': load_image('ghost_idle.png'),
-        'run': load_image('ghost_idle.png'),
-        'take_hit': load_image('ghost_idle.png'),
-        'death': load_image('ghost_idle.png')
+        'idle_f': load_image('ghost_idle.png'),
+        'idle': pygame.transform.flip(load_image('ghost_idle.png'), True, False),
+        'run_f': load_image('ghost_idle.png'),
+        'run': pygame.transform.flip(load_image('ghost_idle.png'), True, False),
+        'take_hit_f': load_image('ghost_idle.png'),
+        'take_hit': pygame.transform.flip(load_image('ghost_idle.png'), True, False),
+        'death_f': load_image('ghost_idle.png'),
+        'death': pygame.transform.flip(load_image('ghost_idle.png'), True, False),
     }
     trash_monster_m = load_image("trash_monster_sheet.png")
     monsters_sets = {
@@ -755,6 +828,13 @@ if __name__ == '__main__':
                         player.staying()
                     else:
                         player.running()
+            # player view checking
+            if event.type == pygame.MOUSEMOTION:
+                x, y = event.pos
+                if player.is_flipped() and x >= player.rect.x + player.rect.w // 2:
+                    player.flip()
+                elif not player.is_flipped() and x < player.rect.x + player.rect.w // 2:
+                    player.flip()
         camera.update(player)
 
         # moving if player is alive
