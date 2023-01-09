@@ -14,16 +14,15 @@ class Tile(pygame.sprite.Sprite):
 
 
 # BORDER
-class Border(pygame.sprite.Sprite): # ttt
-    # строго вертикальный или строго горизонтальный отрезок
+class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
         super().__init__(all_sprites, all_borders)
-        if x1 == x2:  # вертикальная стенка
+        if x1 == x2:  # vertical border
             self.add(vertical_borders)
             self.image = pygame.Surface([1, y2 - y1])
             self.image.fill((255, 255, 255))
             self.rect = pygame.Rect(x1, y1, 1, y2 - y1)
-        else:  # горизонтальная стенка
+        else:  # horizontal border
             self.add(horizontal_borders)
             self.image = pygame.Surface([x2 - x1, 1])
             self.image.fill((255, 255, 255))
@@ -80,42 +79,32 @@ class Character(pygame.sprite.Sprite):
                 if pygame.sprite.collide_mask(self, wall):
                     self.rect.y += self.speed
                     break
-            ''''if not pygame.sprite.spritecollide(self, horizontal_borders, False):
-                for border in horizontal_borders:
-                    if not pygame.sprite.collide_mask(self, border):
-                        self.rect.y -= self.speed
-            else:
-                self.rect.y += self.speed'''
+            if pygame.sprite.collide_mask(self, VB_UP):
+                self.rect.y += self.speed
         if movement == 'DOWN':
             self.rect.y += self.speed
             for wall in walls_group:
                 if pygame.sprite.collide_mask(self, wall):
                     self.rect.y -= self.speed
                     break
-            '''if not pygame.sprite.spritecollide(self, horizontal_borders, False):
-                self.rect.y += self.speed
-            else:
-                self.rect.y -= self.speed'''
+            if pygame.sprite.collide_mask(self, VB_DOWN):
+                self.rect.y -= self.speed
         if movement == 'RIGHT':
             self.rect.x += self.speed
             for wall in walls_group:
                 if pygame.sprite.collide_mask(self, wall):
                     self.rect.x -= self.speed
                     break
-            '''if not pygame.sprite.spritecollide(self, vertical_borders, False):
-                self.rect.x += self.speed
-            else:
-                self.rect.x -= self.speed'''
+            if pygame.sprite.collide_mask(self, HB_RIGHT):
+                self.rect.x -= self.speed
         if movement == 'LEFT':
             self.rect.x -= self.speed
             for wall in walls_group:
                 if pygame.sprite.collide_mask(self, wall):
                     self.rect.x += self.speed
                     break
-            '''if not pygame.sprite.spritecollide(self, vertical_borders, False):
-                self.rect.x -= self.speed
-            else:
-                self.rect.x += self.speed'''
+            if pygame.sprite.collide_mask(self, HB_LEFT):
+                self.rect.x += self.speed
 
     def taking_hit(self):
         if not self.death:
@@ -538,11 +527,12 @@ def generate_level(level):
             elif level[y][x] == 'd':
                 Tile('empty', x, y)
                 Demon(x, y)
-    Border(0, 0, TOTAL_WIDTH, 0)
-    Border(0, TOTAL_HEIGHT, TOTAL_WIDTH, TOTAL_HEIGHT)
-    Border(0, 0, 0, TOTAL_HEIGHT)
-    Border(TOTAL_WIDTH, 0, TOTAL_WIDTH, TOTAL_HEIGHT)
-    return new_player, x, y, monsters
+    VB_UP = Border(0, 0, TOTAL_WIDTH, 0)
+    VB_DOWN = Border(0, TOTAL_HEIGHT, TOTAL_WIDTH, TOTAL_HEIGHT)
+    HB_LEFT = Border(0, 0, 0, TOTAL_HEIGHT)
+    HB_RIGHT = Border(TOTAL_WIDTH, 0, TOTAL_WIDTH, TOTAL_HEIGHT)
+    borders = (VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT)
+    return new_player, x, y, monsters, borders
 
 
 def terminate():
@@ -804,7 +794,8 @@ if __name__ == '__main__':
     PL_SPEED = 3
     M_SPEED = 2
 
-    player, level_x, level_y, monsters = generate_level(level_map)
+    player, level_x, level_y, monsters, borders = generate_level(level_map)
+    VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT = borders
 
     # time
     FPS = 60
