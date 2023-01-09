@@ -58,12 +58,11 @@ class Character(pygame.sprite.Sprite):
 
         w, h = ch_size
         self.rect = pygame.rect.Rect(0, 0, w, h)
-        self.running()
+        self.staying()
         self.image = self.frames[self.cur_frame]
 
-        # расположение rect относительно центра, а не всего спрайта???
         self.rect = self.image.get_rect().move(
-            TILE_WIDTH * pos_x + 15, TILE_HEIGHT * pos_y + 5)
+            TILE_WIDTH * pos_x - w // 2 + TILE_WIDTH // 2, TILE_HEIGHT * pos_y - h // 2 + TILE_HEIGHT // 2)
         self.mask = pygame.mask.from_surface(self.image)
         self.pos_x = pos_x
         self.pos_y = pos_y
@@ -395,7 +394,7 @@ class MartialHero(Player):
 
 # MONSTERS
 # parent-class
-class Monster(Character): # переделать move, movements и анимации
+class Monster(Character):  # attack
     total = 0
 
     def __init__(self, pos_x, pos_y, m_s, m_size, hp):
@@ -409,10 +408,6 @@ class Monster(Character): # переделать move, movements и анимац
         self.right = False
         self.left = False
 
-    def move(self, movement):
-        super().move(movement)
-        self.movements = set()
-
     def update(self):
         super().update()
         if self.is_alive():
@@ -420,7 +415,7 @@ class Monster(Character): # переделать move, movements и анимац
             pl_y = player.rect.y + player.rect.h // 2
             m_x = self.rect.x + self.rect.w // 2
             m_y = self.rect.y + self.rect.h // 2
-            movements = [self.up, self.down, self.right, self.left]
+            self.movements = set()
 
             if m_x < pl_x:
                 self.right = True
@@ -428,21 +423,28 @@ class Monster(Character): # переделать move, movements и анимац
                 if self.flipped:
                     self.flip()
                 self.move('RIGHT')
+                self.movements.add('RIGHT')
             elif m_x > pl_x:
                 self.right = False
                 self.left = True
                 if not self.flipped:
                     self.flip()
                 self.move('LEFT')
+                self.movements.add('LEFT')
             if m_y < pl_y:
                 self.down = True
                 self.up = False
                 self.move('DOWN')
+                self.movements.add('DOWN')
             elif m_y > pl_y:
                 self.down = False
                 self.up = True
                 self.move('UP')
-
+                self.movements.add('UP')
+        if any(self.movements) and self.cur_frame == 0:
+            self.running()
+        elif not any(self.movements):
+            self.staying()
         if self.stay and iteration % 2 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
@@ -549,7 +551,6 @@ def load_level(filename):
 
 def generate_level(level):
     new_player, x, y = None, None, None
-    monsters = []
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
@@ -564,16 +565,16 @@ def generate_level(level):
                 new_player = MartialHero(x, y)
             elif level[y][x] == 'm':
                 Tile('empty', x, y)
-                monsters.append((Mushroom, x, y))
+                Mushroom(x, y)
             elif level[y][x] == 'g':
                 Tile('empty', x, y)
-                monsters.append((Goblin, x, y))
+                Goblin(x, y)
             elif level[y][x] == 's':
                 Tile('empty', x, y)
-                monsters.append((Skeleton, x, y))
+                Skeleton(x, y)
             elif level[y][x] == 'h':
                 Tile('empty', x, y)
-                monsters.append((Ghost, x, y))
+                Ghost(x, y)
             elif level[y][x] == 'd':
                 Tile('empty', x, y)
                 Demon(x, y)
@@ -582,7 +583,7 @@ def generate_level(level):
     HB_LEFT = Border(0, 0, 0, TOTAL_HEIGHT)
     HB_RIGHT = Border(TOTAL_WIDTH, 0, TOTAL_WIDTH, TOTAL_HEIGHT)
     borders = (VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT)
-    return new_player, x, y, monsters, borders
+    return new_player, x, y, borders
 
 
 def terminate():
@@ -849,7 +850,7 @@ if __name__ == '__main__':
     M_SPEED = 2
     TOTAL_COUNT = 0
 
-    player, level_x, level_y, monsters, borders = generate_level(level_map)
+    player, level_x, level_y, borders = generate_level(level_map)
     VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT = borders
 
     # time
@@ -938,6 +939,7 @@ if __name__ == '__main__':
         for sprite in all_sprites:
             camera.apply(sprite)
 
+        monsters = [(Skeleton, 0, 0)]
         # monsters spawn
         if iteration % (FPS * 10) == 0 and len(monsters_group) <= 6 and player.is_alive():
             for M, x, y in monsters:
