@@ -76,44 +76,44 @@ class Character(pygame.sprite.Sprite):
     def move(self, movement):
         if movement == 'UP':
             self.rect.y -= self.speed
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
+                    self.rect.y += self.speed
+                    break
             ''''if not pygame.sprite.spritecollide(self, horizontal_borders, False):
                 for border in horizontal_borders:
                     if not pygame.sprite.collide_mask(self, border):
                         self.rect.y -= self.speed
-                for wall in walls_group:
-                    if pygame.sprite.collide_mask(self, wall):
-                        self.rect.y += self.speed
-                        break
             else:
                 self.rect.y += self.speed'''
         if movement == 'DOWN':
             self.rect.y += self.speed
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
+                    self.rect.y -= self.speed
+                    break
             '''if not pygame.sprite.spritecollide(self, horizontal_borders, False):
                 self.rect.y += self.speed
-                for wall in walls_group:
-                    if pygame.sprite.collide_mask(self, wall):
-                        self.rect.y -= self.speed
-                        break
             else:
                 self.rect.y -= self.speed'''
         if movement == 'RIGHT':
             self.rect.x += self.speed
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
+                    self.rect.x -= self.speed
+                    break
             '''if not pygame.sprite.spritecollide(self, vertical_borders, False):
                 self.rect.x += self.speed
-                for wall in walls_group:
-                    if pygame.sprite.collide_mask(self, wall):
-                        self.rect.x -= self.speed
-                        break
             else:
                 self.rect.x -= self.speed'''
         if movement == 'LEFT':
             self.rect.x -= self.speed
+            for wall in walls_group:
+                if pygame.sprite.collide_mask(self, wall):
+                    self.rect.x += self.speed
+                    break
             '''if not pygame.sprite.spritecollide(self, vertical_borders, False):
                 self.rect.x -= self.speed
-                for wall in walls_group:
-                    if pygame.sprite.collide_mask(self, wall):
-                        self.rect.x += self.speed
-                        break
             else:
                 self.rect.x += self.speed'''
 
@@ -893,7 +893,7 @@ if __name__ == '__main__':
             camera.apply(sprite)
 
         # monsters spawn
-        if iteration % 150 == 0 and len(monsters_group) <= 6 and player.is_alive():
+        if iteration % (FPS * 10) == 0 and len(monsters_group) <= 6 and player.is_alive():
             for M, x, y in monsters:
                 M(x, y)
 
