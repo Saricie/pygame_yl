@@ -112,7 +112,7 @@ class Character(pygame.sprite.Sprite):
                 self.change_animation(self.sheet_take_hit, self.take_hit_w, self.take_hit_h)
             else:
                 self.change_animation(self.sheet_take_hit_f, self.take_hit_w, self.take_hit_h, True)
-            self.health -= 10
+            self.health -= 3
             self.take_hit = True
             self.stay = False
             self.run = False
@@ -367,7 +367,7 @@ class MartialHero(Player):
         elif self.run and iteration % 3 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.take_hit and iteration % 2 == 0:
+        elif self.take_hit and iteration % 4 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
@@ -441,10 +441,6 @@ class Monster(Character):  # attack
                 self.up = True
                 self.move('UP')
                 self.movements.add('UP')
-        if any(self.movements) and self.cur_frame == 0:
-            self.running()
-        elif not any(self.movements):
-            self.staying()
         if self.stay and iteration % 2 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
@@ -469,6 +465,10 @@ class Monster(Character):  # attack
                 Monster.total += 1
                 # do kill?
                 self.kill()
+        if any(self.movements) and self.cur_frame == 0:
+            self.running()
+        elif not any(self.movements):
+            self.staying()
 
 
 # child-classes:
@@ -941,9 +941,9 @@ if __name__ == '__main__':
 
         monsters = [(Skeleton, 0, 0)]
         # monsters spawn
-        if iteration % (FPS * 10) == 0 and len(monsters_group) <= 6 and player.is_alive():
-            for M, x, y in monsters:
-                M(x, y)
+        #if iteration % (FPS * 10) == 0 and len(monsters_group) <= 6 and player.is_alive():
+        #    for M, x, y in monsters:
+        #        M(x, y)
 
         # iteration and updating
         screen.fill((0, 0, 0))
