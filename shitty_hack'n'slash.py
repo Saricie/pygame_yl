@@ -639,6 +639,10 @@ if __name__ == '__main__':
         'wall': load_image('box.png'),
         'empty': load_image('grass.png')
     }
+    pause_image = load_image('pause1.png')
+    pause_image = pygame.transform.scale(pause_image,
+                                         (pause_image.get_width() * 2,
+                                          pause_image.get_height() * 2))
 
     # players sprites sets
     evil_wizard_pl = {
@@ -857,6 +861,7 @@ if __name__ == '__main__':
     FPS = 60
     clock = pygame.time.Clock()
     iteration = 0
+    pause = False
 
     # CAMERA INITIALIZATION
     camera = Camera()
@@ -867,101 +872,126 @@ if __name__ == '__main__':
     # GAME BEGIN
     keys = set()
     while True:
-        for event in pygame.event.get():
-            # quit checking
-            if event.type == pygame.QUIT:
-                terminate()
-            # player movement start checking
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP or event.key == pygame.K_w:
-                    keys.add('UP')
-                    player.running()
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    keys.add('DOWN')
-                    player.running()
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    keys.add('RIGHT')
-                    player.running()
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    keys.add('LEFT')
-                    player.running()
-                if event.key == pygame.K_q:
-                    keys = set()
-                    player.dying()
-                if event.key == pygame.K_r and player.has_lives():
-                    player.reviving()
-                if event.key == pygame.K_h:
-                    player.taking_hit()
-            # player movement end checking
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP or event.key == pygame.K_w:
-                    keys.discard('UP')
-                    if not len(keys) and not player.is_attacking():
+        if pause:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    if WIDTH - pause_image.get_width() <= x <= WIDTH and \
+                            pause_image.get_height() >= y >= 0:
+                        pause = not pause
+                        keys = set()
                         player.staying()
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    keys.discard('DOWN')
-                    if not len(keys) and not player.is_attacking():
+                        player.stop_attack()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        pause = not pause
+                        keys = set()
                         player.staying()
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    keys.discard('RIGHT')
-                    if not len(keys) and not player.is_attacking():
-                        player.staying()
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    keys.discard('LEFT')
-                    if not len(keys) and not player.is_attacking():
-                        player.staying()
-            # player attack start checking
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    player.attacking(event.pos)
-            # player attack end checking
-            if event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1:
-                    player.stop_attack()
-                    if len(keys) == 0:
-                        player.staying()
-                    else:
+                        player.stop_attack()
+        if not pause:
+            for event in pygame.event.get():
+                # quit checking
+                if event.type == pygame.QUIT:
+                    terminate()
+                # player movement start checking
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP or event.key == pygame.K_w:
+                        keys.add('UP')
                         player.running()
-            # player view checking
-            if event.type == pygame.MOUSEMOTION:
-                x, y = event.pos
-                if player.is_flipped() and x >= player.rect.x + player.rect.w // 2:
-                    player.flip()
-                elif not player.is_flipped() and x < player.rect.x + player.rect.w // 2:
-                    player.flip()
-        camera.update(player)
+                    if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                        keys.add('DOWN')
+                        player.running()
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                        keys.add('RIGHT')
+                        player.running()
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                        keys.add('LEFT')
+                        player.running()
+                    if event.key == pygame.K_q:
+                        keys = set()
+                        player.dying()
+                    if event.key == pygame.K_r and player.has_lives():
+                        player.reviving()
+                    if event.key == pygame.K_h:
+                        player.taking_hit()
+                    if event.key == pygame.K_SPACE:
+                        pause = not pause
+                # player movement end checking
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_UP or event.key == pygame.K_w:
+                        keys.discard('UP')
+                        if not len(keys) and not player.is_attacking():
+                            player.staying()
+                    if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                        keys.discard('DOWN')
+                        if not len(keys) and not player.is_attacking():
+                            player.staying()
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                        keys.discard('RIGHT')
+                        if not len(keys) and not player.is_attacking():
+                            player.staying()
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                        keys.discard('LEFT')
+                        if not len(keys) and not player.is_attacking():
+                            player.staying()
+                # player attack start checking
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    if WIDTH - pause_image.get_width() <= x <= WIDTH and \
+                            pause_image.get_height() >= y >= 0:
+                        pause = not pause
+                    if event.button == 1:
+                        player.attacking((x, y))
+                # player attack end checking
+                if event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1:
+                        player.stop_attack()
+                        if len(keys) == 0:
+                            player.staying()
+                        else:
+                            player.running()
+                # player view checking
+                if event.type == pygame.MOUSEMOTION:
+                    x, y = event.pos
+                    if player.is_flipped() and x >= player.rect.x + player.rect.w // 2:
+                        player.flip()
+                    elif not player.is_flipped() and x < player.rect.x + player.rect.w // 2:
+                        player.flip()
+            camera.update(player)
 
-        # moving if player is alive
-        if player.is_alive():
-            for k in keys:
-                player.move(k)
-        # camera
-        for sprite in all_sprites:
-            camera.apply(sprite)
+            # moving if player is alive
+            if player.is_alive():
+                for k in keys:
+                    player.move(k)
+            # camera
+            for sprite in all_sprites:
+                camera.apply(sprite)
 
-        monsters = [(Skeleton, 0, 0)]
-        # monsters spawn
-        #if iteration % (FPS * 10) == 0 and len(monsters_group) <= 6 and player.is_alive():
-        #    for M, x, y in monsters:
-        #        M(x, y)
+            monsters = [(Skeleton, 0, 0)]
+            # monsters spawn
+            #if iteration % (FPS * 10) == 0 and len(monsters_group) <= 6 and player.is_alive():
+            #    for M, x, y in monsters:
+            #        M(x, y)
 
-        # iteration and updating
-        screen.fill((0, 0, 0))
+            # iteration and updating
+            screen.fill((0, 0, 0))
 
-        all_sprites.update()
-        all_sprites.draw(screen)
-        characters_group.draw(screen)
-        iteration += 1
+            all_sprites.update()
+            all_sprites.draw(screen)
+            characters_group.draw(screen)
+            iteration += 1
 
-        TOTAL_COUNT = Monster.total
-        font = pygame.font.Font("data/fonts/MinimalPixelLower.ttf", 30)
-        string_total = font.render(f'KILLS: {TOTAL_COUNT}', True, pygame.Color('white'))
-        string_lives = font.render(f'LIVES: {player.get_lives()}', True, pygame.Color('white'))
-        screen.blit(string_total, (10, 0, 70, 20))
-        screen.blit(string_lives, (100, 0, 70, 20))
+            TOTAL_COUNT = Monster.total
+            font = pygame.font.Font("data/fonts/MinimalPixelLower.ttf", 30)
+            string_total = font.render(f'KILLS: {TOTAL_COUNT}', True, pygame.Color('white'))
+            string_lives = font.render(f'LIVES: {player.get_lives()}', True, pygame.Color('white'))
+            screen.blit(string_total, (10, 0, 70, 20))
+            screen.blit(string_lives, (100, 0, 70, 20))
+            screen.blit(pause_image, (WIDTH - pause_image.get_width(),
+                                      0, WIDTH, pause_image.get_height()))
 
-        if not player.is_alive() and not player.has_lives():
-            game_over()
+            if not player.is_alive() and not player.has_lives():
+                game_over()
 
-        pygame.display.flip()
-        clock.tick(FPS)
+            pygame.display.flip()
+            clock.tick(FPS)

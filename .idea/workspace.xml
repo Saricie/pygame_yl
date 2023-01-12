@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="t">
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment=".">
+      <change afterPath="$PROJECT_DIR$/data/button.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pause.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pause1.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/map2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/users.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.sqlite" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,8 +45,8 @@
       <recent name="C:\Users\1\Desktop\Проект PyGame" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\1\Desktop\Проект PyGame\data\fonts" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data" />
+      <recent name="C:\Users\1\Desktop\Проект PyGame\data\fonts" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\fonts" />
       <recent name="C:\Users\1\Desktop\Проект PyGame" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data\skeleton" />
@@ -212,7 +215,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673269350916</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary=".">
+      <created>1673546556782</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1673546556782</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -243,6 +253,7 @@
     <MESSAGE value="Столкновения с классом Border" />
     <MESSAGE value="Вывод количества жизней и убийств" />
     <MESSAGE value="t" />
-    <option name="LAST_COMMIT_MESSAGE" value="t" />
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
 </project>
