@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment=".">
-      <change afterPath="$PROJECT_DIR$/data/button.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/pause.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/pause1.png" afterDir="false" />
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Добавлена пауза">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/users.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/menu.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -222,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673546556782</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Добавлена пауза">
+      <created>1673549273479</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1673549273479</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -254,6 +260,7 @@
     <MESSAGE value="Вывод количества жизней и убийств" />
     <MESSAGE value="t" />
     <MESSAGE value="." />
-    <option name="LAST_COMMIT_MESSAGE" value="." />
+    <MESSAGE value="Добавлена пауза" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлена пауза" />
   </component>
 </project>

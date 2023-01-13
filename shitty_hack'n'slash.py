@@ -300,8 +300,7 @@ class EvilWizard(Player):
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
                 if self.cur_frame % len(self.frames) == 0:
-                    # Bullet(self.pos)
-                    print(self.pos)
+                    Bullet(self, player_group, self.pos)
                     self.attacking(self.pos)
             if pygame.sprite.spritecollide(self, monsters_group, False):
                 if self.cur_frame in [3, 4, 5, 6]:
@@ -501,6 +500,21 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self, character, ch_group, pos):
         super().__init__(all_sprites, bullets_group, ch_group)
         self.character = character
+        self.x, self.y = pos
+        self.speed_x = 4
+        self.speed_y = 4
+        self.image = pygame.transform.scale2x(load_image('pause.png'))
+        lt = self.character.rect.x + self.character.rect.w // 2 - self.image.get_width() // 2
+        lh = self.character.rect.y + self.character.rect.h // 2 - self.image.get_height() // 2
+        self.rect = pygame.rect.Rect(lt, lh, self.image.get_width(), self.image.get_height())
+        if self.rect.x + self.rect.w // 2 > self.x:
+            self.speed_x *= -1
+        if self.rect.y + self.rect.h // 2 > self.y:
+            self.speed_x *= -1
+
+    def update(self):
+        self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
 
 
 class Camera:
@@ -614,9 +628,13 @@ def menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN or \
-                    event.type == pygame.MOUSEBUTTONDOWN:
-                return  # начинаем игру
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return None
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                ...
+            elif event.type == pygame.USEREVENT:
+                ...
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -844,7 +862,7 @@ if __name__ == '__main__':
     en_bullets_group = pygame.sprite.Group()
 
     # LOADING MAP AND PLAYER INITIALIZATION
-    level_map, max_width, max_height = load_level('map2.txt')
+    level_map, max_width, max_height = load_level('map1.txt')
 
     # CONSTANTS
     TILE_WIDTH = TILE_HEIGHT = 50
@@ -853,6 +871,8 @@ if __name__ == '__main__':
     PL_SPEED = 3
     M_SPEED = 2
     TOTAL_COUNT = 0
+    MAP_NUM = 1
+    NEXT_LEVEL = 10
 
     player, level_x, level_y, borders = generate_level(level_map)
     VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT = borders
@@ -872,8 +892,23 @@ if __name__ == '__main__':
     # GAME BEGIN
     keys = set()
     while True:
+        if TOTAL_COUNT == NEXT_LEVEL and NEXT_LEVEL != 20:
+            NEXT_LEVEL += 10
+            MAP_NUM += 1
+            for s in all_sprites:
+                s.kill()
+            level_map, max_width, max_height = load_level(f'map{MAP_NUM}.txt')
+            TOTAL_WIDTH = TILE_WIDTH * max_width
+            TOTAL_HEIGHT = TILE_HEIGHT * max_height
+            player, level_x, level_y, borders = generate_level(level_map)
+            VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT = borders
         if pause:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    terminate()
+                if event.type == pygame.WINDOWEXPOSED:
+                    WIDTH = screen.get_width()
+                    HEIGHT = screen.get_height()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = event.pos
                     if WIDTH - pause_image.get_width() <= x <= WIDTH and \
@@ -969,9 +1004,9 @@ if __name__ == '__main__':
 
             monsters = [(Skeleton, 0, 0)]
             # monsters spawn
-            #if iteration % (FPS * 10) == 0 and len(monsters_group) <= 6 and player.is_alive():
-            #    for M, x, y in monsters:
-            #        M(x, y)
+            if iteration % (FPS * 10) == 0 and len(monsters_group) <= 6 and player.is_alive():
+                for M, x, y in monsters:
+                    M(x, y)
 
             # iteration and updating
             screen.fill((0, 0, 0))
