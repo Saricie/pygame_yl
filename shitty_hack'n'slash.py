@@ -606,10 +606,9 @@ def terminate():
 
 
 def menu():
+    global WIDTH, HEIGHT
     intro_text = ["{Название игры придумать}", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
+                  "", "Press Space to begin"]
 
     menu_background = pygame.transform.scale(load_image('night_town_background.png'), (WIDTH, HEIGHT))
     screen.blit(menu_background, (0, 0))
@@ -623,17 +622,17 @@ def menu():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN:
+            if event.type == pygame.WINDOWEXPOSED:
+                WIDTH = screen.get_width()
+                HEIGHT = screen.get_height()
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     return None
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                ...
-            elif event.type == pygame.USEREVENT:
+            if event.type == pygame.USEREVENT:
                 ...
         pygame.display.flip()
         clock.tick(FPS)

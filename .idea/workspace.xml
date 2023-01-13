@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Добавлена пауза">
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Обновление уровня">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/map1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/map2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/menu.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
     </list>
@@ -228,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673549273479</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Обновление уровня">
+      <created>1673611423501</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1673611423501</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -261,6 +266,7 @@
     <MESSAGE value="t" />
     <MESSAGE value="." />
     <MESSAGE value="Добавлена пауза" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлена пауза" />
+    <MESSAGE value="Обновление уровня" />
+    <option name="LAST_COMMIT_MESSAGE" value="Обновление уровня" />
   </component>
 </project>
