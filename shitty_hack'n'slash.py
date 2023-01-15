@@ -503,7 +503,7 @@ class Bullet(pygame.sprite.Sprite):
         self.x, self.y = pos
         self.speed_x = 4
         self.speed_y = 4
-        self.image = pygame.transform.scale2x(load_image('pause.png'))
+        self.image = pygame.transform.scale2x(load_image('GUI/pause.png'))
         lt = self.character.rect.x + self.character.rect.w // 2 - self.image.get_width() // 2
         lh = self.character.rect.y + self.character.rect.h // 2 - self.image.get_height() // 2
         self.rect = pygame.rect.Rect(lt, lh, self.image.get_width(), self.image.get_height())
@@ -518,17 +518,14 @@ class Bullet(pygame.sprite.Sprite):
 
 
 class Camera:
-    # зададим начальный сдвиг камеры
     def __init__(self):
         self.dx = 0
         self.dy = 0
 
-    # сдвинуть объект obj на смещение камеры
     def apply(self, obj):
         obj.rect.x += self.dx
         obj.rect.y += self.dy
 
-    # позиционировать камеру на объекте target
     def update(self, target):
         self.dx = -(target.rect.x + target.rect.w // 2 - WIDTH // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - HEIGHT // 2)
@@ -609,10 +606,10 @@ def menu():
     global WIDTH, HEIGHT
     intro_text = ["{Название игры придумать}", "",
                   "", "Press Space to begin"]
-
+    manager = pygame_gui.UIManager((WIDTH, HEIGHT), os.path.join('data', 'menu.json'))
     menu_background = pygame.transform.scale(load_image('night_town_background.png'), (WIDTH, HEIGHT))
     screen.blit(menu_background, (0, 0))
-    font = pygame.font.Font(None, 30)
+    font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 30)
     text_coord = 50
     for line in intro_text:
         string_rendered = font.render(line, True, pygame.Color('white'))
@@ -622,6 +619,21 @@ def menu():
         intro_rect.x = 10
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
+    start_btn = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((WIDTH // 2 - 75, HEIGHT // 3 - 25), (150, 50)),
+        text='Начать игру',
+        manager=manager
+    )
+    records_btn = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((WIDTH // 2 - 75, HEIGHT // 2 - 25), (150, 50)),
+        text='Рекорды',
+        manager=manager
+    )
+    exit_btn = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((WIDTH // 2 - 75, HEIGHT // 2 + 125), (150, 50)),
+        text='Выход',
+        manager=manager
+    )
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -633,13 +645,41 @@ def menu():
                 if event.key == pygame.K_SPACE:
                     return None
             if event.type == pygame.USEREVENT:
-                ...
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == start_btn:
+                        return None
+                    if event.ui_element == records_btn:
+                        # show_records()
+                        ...
+                    if event.ui_element == exit_btn:
+                        terminate()
+            manager.process_events(event)
+        manager.update(FPS / 1000)
+        manager.draw_ui(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
 
 def game_over():
-    ...
+    global pause, WIDTH, HEIGHT
+    pause = True
+    screen.fill((0, 0, 0))
+    font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 30)
+    str_game_over = font.render('GAME OVER', True, pygame.Color('white'))
+    str_total = font.render(f'TOTAL: {TOTAL_COUNT}', True, pygame.Color('white'))
+    # tot = cur.execute(f'''SELECT total FROM users WHERE name = {USER}''').fetchone()
+    # print(tot)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            if event.type == pygame.WINDOWEXPOSED:
+                WIDTH = screen.get_width()
+                HEIGHT = screen.get_height()
+        screen.blit(str_game_over, (WIDTH // 2 - 50, HEIGHT // 2 - 15, 100, 30))
+        screen.blit(str_total, (WIDTH // 2 - 50, HEIGHT // 2 + 20, 100, 30))
+        pygame.display.flip()
+        clock.tick(FPS)
 
 
 if __name__ == '__main__':
@@ -656,7 +696,7 @@ if __name__ == '__main__':
         'wall': load_image('box.png'),
         'empty': load_image('grass.png')
     }
-    pause_image = load_image('pause1.png')
+    pause_image = load_image(os.path.join('GUI', 'pause_box.png'))
     pause_image = pygame.transform.scale(pause_image,
                                          (pause_image.get_width() * 2,
                                           pause_image.get_height() * 2))
@@ -873,6 +913,11 @@ if __name__ == '__main__':
     MAP_NUM = 1
     NEXT_LEVEL = 10
 
+    # DATA BASE
+    db = sqlite3.connect(os.path.join('data', 'users.sqlite'))
+    cur = db.cursor()
+    USER = 'admin'
+
     player, level_x, level_y, borders = generate_level(level_map)
     VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT = borders
 
@@ -991,6 +1036,9 @@ if __name__ == '__main__':
                         player.flip()
                     elif not player.is_flipped() and x < player.rect.x + player.rect.w // 2:
                         player.flip()
+                if event.type == pygame.WINDOWEXPOSED:
+                    WIDTH = screen.get_width()
+                    HEIGHT = screen.get_height()
             camera.update(player)
 
             # moving if player is alive
@@ -1016,7 +1064,7 @@ if __name__ == '__main__':
             iteration += 1
 
             TOTAL_COUNT = Monster.total
-            font = pygame.font.Font("data/fonts/MinimalPixelLower.ttf", 30)
+            font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 30)
             string_total = font.render(f'KILLS: {TOTAL_COUNT}', True, pygame.Color('white'))
             string_lives = font.render(f'LIVES: {player.get_lives()}', True, pygame.Color('white'))
             screen.blit(string_total, (10, 0, 70, 20))
@@ -1024,8 +1072,9 @@ if __name__ == '__main__':
             screen.blit(pause_image, (WIDTH - pause_image.get_width(),
                                       0, WIDTH, pause_image.get_height()))
 
-            if not player.is_alive() and not player.has_lives():
+            if not player.is_alive() and not player.has_lives() and iteration % (FPS * 3) == 0:
                 game_over()
+                terminate()
 
             pygame.display.flip()
             clock.tick(FPS)
