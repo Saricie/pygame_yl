@@ -685,7 +685,7 @@ def get_username():
                         cur.execute(f'''INSERT INTO users(name) 
                                         VALUES(\'{name[:-1]}\')''')
                         db.commit()
-                    return name
+                    return name[:-1]
         screen.fill((0, 0, 0))
         screen.blit(str_get, (WIDTH // 2 - 100, HEIGHT // 2 - 15, 100, 30))
         screen.blit(font.render(name, True, pygame.Color('white')), (WIDTH // 2 - 50, HEIGHT // 2 + 20, 100, 30))
@@ -694,16 +694,17 @@ def get_username():
 
 
 def game_over():
-    global pause, WIDTH, HEIGHT
+    global pause, WIDTH, HEIGHT, player, level_x, level_y, borders, VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT, \
+        TOTAL_WIDTH, TOTAL_HEIGHT, level_map, max_width, max_height
     pause = True
     screen.fill((0, 0, 0))
     font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 30)
     str_game_over = font.render('GAME OVER', True, pygame.Color('white'))
     str_total = font.render(f'TOTAL: {TOTAL_COUNT}', True, pygame.Color('white'))
-    tot = cur.execute(f'''SELECT total FROM users WHERE name = \'{USER}\'''').fetchone()
+    print(TOTAL_COUNT, USER)
     cur.execute(f'''UPDATE users
                     SET last = {TOTAL_COUNT},
-                    total = {tot[0] + TOTAL_COUNT},
+                    total = total + {TOTAL_COUNT},
                     deaths = deaths + 1
                     WHERE name = \'{USER}\'''')
     db.commit()
@@ -714,6 +715,14 @@ def game_over():
             if event.type == pygame.WINDOWEXPOSED:
                 WIDTH = screen.get_width()
                 HEIGHT = screen.get_height()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r or event.key == pygame.K_SPACE:
+                    level_map, max_width, max_height = load_level('map1.txt')
+                    player, level_x, level_y, borders = generate_level(level_map)
+                    VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT = borders
+                    TOTAL_WIDTH = TILE_WIDTH * max_width
+                    TOTAL_HEIGHT = TILE_HEIGHT * max_height
+                    return None
         screen.blit(str_game_over, (WIDTH // 2 - 50, HEIGHT // 2 - 15, 100, 30))
         screen.blit(str_total, (WIDTH // 2 - 50, HEIGHT // 2 + 20, 100, 30))
         pygame.display.flip()
@@ -1112,7 +1121,6 @@ if __name__ == '__main__':
 
             if not player.is_alive() and not player.has_lives() and iteration % (FPS * 3) == 0:
                 game_over()
-                terminate()
 
             pygame.display.flip()
             clock.tick(FPS)
