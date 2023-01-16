@@ -641,6 +641,8 @@ def menu():
             if event.type == pygame.WINDOWEXPOSED:
                 WIDTH = screen.get_width()
                 HEIGHT = screen.get_height()
+                menu_background = pygame.transform.scale(load_image('night_town_background.png'), (WIDTH, HEIGHT))
+                screen.blit(menu_background, (0, 0))
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     return None
@@ -656,6 +658,37 @@ def menu():
             manager.process_events(event)
         manager.update(FPS / 1000)
         manager.draw_ui(screen)
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+def get_username():
+    global WIDTH, HEIGHT
+    font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 60)
+    str_get = font.render('Enter your username', True, pygame.Color('white'))
+    name = '|'
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            if event.type == pygame.WINDOWEXPOSED:
+                WIDTH = screen.get_width()
+                HEIGHT = screen.get_height()
+            if event.type == pygame.KEYDOWN:
+                if 97 <= event.key <= 122 or 48 <= event.key <= 57:
+                    name = name[:-1] + chr(event.key) + '|'
+                if event.key == pygame.K_BACKSPACE:
+                    name = name[:-2] + '|'
+                if event.key == pygame.K_RETURN:
+                    un = cur.execute(f'''SELECT name FROM users WHERE name = \'{name[:-1]}\'''').fetchall()
+                    if not any(un):
+                        cur.execute(f'''INSERT INTO users(name) 
+                                        VALUES(\'{name[:-1]}\')''')
+                        db.commit()
+                    return name
+        screen.fill((0, 0, 0))
+        screen.blit(str_get, (WIDTH // 2 - 100, HEIGHT // 2 - 15, 100, 30))
+        screen.blit(font.render(name, True, pygame.Color('white')), (WIDTH // 2 - 50, HEIGHT // 2 + 20, 100, 30))
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -918,11 +951,6 @@ if __name__ == '__main__':
     MAP_NUM = 1
     NEXT_LEVEL = 10
 
-    # DATA BASE
-    db = sqlite3.connect(os.path.join('data', 'users.sqlite'))
-    cur = db.cursor()
-    USER = 'admin'
-
     player, level_x, level_y, borders = generate_level(level_map)
     VB_UP, VB_DOWN, HB_LEFT, HB_RIGHT = borders
 
@@ -931,6 +959,11 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     iteration = 0
     pause = False
+
+    # DATA BASE
+    db = sqlite3.connect(os.path.join('data', 'users.sqlite'))
+    cur = db.cursor()
+    USER = get_username()
 
     # CAMERA INITIALIZATION
     camera = Camera()
