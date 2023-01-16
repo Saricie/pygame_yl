@@ -667,8 +667,13 @@ def game_over():
     font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 30)
     str_game_over = font.render('GAME OVER', True, pygame.Color('white'))
     str_total = font.render(f'TOTAL: {TOTAL_COUNT}', True, pygame.Color('white'))
-    # tot = cur.execute(f'''SELECT total FROM users WHERE name = {USER}''').fetchone()
-    # print(tot)
+    tot = cur.execute(f'''SELECT total FROM users WHERE name = \'{USER}\'''').fetchone()
+    cur.execute(f'''UPDATE users
+                    SET last = {TOTAL_COUNT},
+                    total = {tot[0] + TOTAL_COUNT},
+                    deaths = deaths + 1
+                    WHERE name = \'{USER}\'''')
+    db.commit()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

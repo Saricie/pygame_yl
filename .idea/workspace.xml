@@ -1,31 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Начато меню">
-      <change afterPath="$PROJECT_DIR$/data/GUI/accept.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/arrows.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/bar_empty.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/bar_empty_long.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/black.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/blue_bar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/button_sq.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/button_sq_hovered.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/button_sq_pressed.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/cross.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/home.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/light_blue_bar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/player_sheet.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/red_bar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/sheet.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/GUI/yellow_bar.png" afterDir="false" />
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Доделана функция game_over()">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/button.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/GUI/button.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/fon.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mario.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/menu.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/pause.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/GUI/pause.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/pause1.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/GUI/pause_box.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/users.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.sqlite" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
     </list>
@@ -292,7 +269,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673624357107</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Начато меню, экран смерти">
+      <created>1673802620377</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1673802620377</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -327,6 +311,8 @@
     <MESSAGE value="Добавлена пауза" />
     <MESSAGE value="Обновление уровня" />
     <MESSAGE value="Начато меню" />
-    <option name="LAST_COMMIT_MESSAGE" value="Начато меню" />
+    <MESSAGE value="Начато меню, экран смерти" />
+    <MESSAGE value="Доделана функция game_over()" />
+    <option name="LAST_COMMIT_MESSAGE" value="Доделана функция game_over()" />
   </component>
 </project>
