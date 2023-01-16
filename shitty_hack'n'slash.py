@@ -701,7 +701,6 @@ def game_over():
     font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 30)
     str_game_over = font.render('GAME OVER', True, pygame.Color('white'))
     str_total = font.render(f'TOTAL: {TOTAL_COUNT}', True, pygame.Color('white'))
-    print(TOTAL_COUNT, USER)
     cur.execute(f'''UPDATE users
                     SET last = {TOTAL_COUNT},
                     total = total + {TOTAL_COUNT},

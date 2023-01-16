@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Добавлена БД с юзерами">
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="Доделана функция game_over()">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -289,7 +290,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673860792499</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Доделана функция game_over()">
+      <created>1673869421132</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1673869421133</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -325,8 +333,8 @@
     <MESSAGE value="Обновление уровня" />
     <MESSAGE value="Начато меню" />
     <MESSAGE value="Начато меню, экран смерти" />
-    <MESSAGE value="Доделана функция game_over()" />
     <MESSAGE value="Добавлена БД с юзерами" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлена БД с юзерами" />
+    <MESSAGE value="Доделана функция game_over()" />
+    <option name="LAST_COMMIT_MESSAGE" value="Доделана функция game_over()" />
   </component>
 </project>
