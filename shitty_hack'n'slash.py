@@ -71,6 +71,7 @@ class Character(pygame.sprite.Sprite):
         self.health = hp
         self.speed = speed
         self.pos = (0, 0)
+        self.frames_count = 0
 
     def move(self, movement):
         if movement == 'UP':
@@ -181,6 +182,7 @@ class Character(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         if self.health <= 0:
             self.dying()
+        self.frames_count += 1
 
 
 # PLAYER
@@ -191,6 +193,7 @@ class Player(Character):
         self.attack = False
         self.attack_num = 1
         self.lives = 3
+        self.timer = 0
         super().__init__(pos_x, pos_y, pl_s, pl_size, hp, PL_SPEED)
         self.add(player_group)
 
@@ -277,6 +280,14 @@ class Player(Character):
                 else:
                     self.change_animation(self.sheet_revive_f, self.revive_w, self.revive_h, True)
 
+    def disabled(self):
+        self.timer = 10
+
+    def update(self):
+        super().update()
+        if self.timer:
+            self.timer -= 1
+
 
 # child-classes:
 class EvilWizard(Player):
@@ -296,7 +307,7 @@ class EvilWizard(Player):
                     self.taking_hit()
                     break
         if self.attack:
-            if iteration % 2 == 0:
+            if self.frames_count % 3 == 0:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
                 if self.cur_frame % len(self.frames) == 0:
@@ -307,13 +318,13 @@ class EvilWizard(Player):
                     for m in monsters_group:
                         if pygame.sprite.collide_mask(self, m):
                             m.taking_hit()
-        elif self.stay and iteration % 3 == 0:
+        elif self.stay and self.frames_count % 3 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.run and iteration % 3 == 0:
+        elif self.run and self.frames_count % 3 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.take_hit and iteration % 2 == 0:
+        elif self.take_hit and self.frames_count % 2 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
@@ -323,11 +334,11 @@ class EvilWizard(Player):
                     self.running()
                 else:
                     self.staying()
-        elif self.death and iteration % 3 == 0:
+        elif self.death and self.frames_count % 3 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
-        elif self.revive and iteration % 4 == 0:
+        elif self.revive and self.frames_count % 4 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
@@ -344,13 +355,14 @@ class MartialHero(Player):
 
     def update(self):
         super().update()
-        if not self.attack and pygame.sprite.spritecollide(self, monsters_group, False):
+        if not self.timer and self.is_alive() and not self.attack and \
+                pygame.sprite.spritecollide(self, monsters_group, False):
             for m in monsters_group:
                 if m.is_alive() and pygame.sprite.collide_mask(self, m):
                     self.taking_hit()
                     break
         if self.attack:
-            if iteration % 3 == 0:
+            if self.frames_count % 3 == 0:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
                 if self.cur_frame % len(self.frames) == 0:
@@ -360,13 +372,13 @@ class MartialHero(Player):
                     for m in monsters_group:
                         if pygame.sprite.collide_mask(self, m):
                             m.taking_hit()
-        elif self.stay and iteration % 3 == 0:
+        elif self.stay and self.frames_count % 3 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.run and iteration % 3 == 0:
+        elif self.run and self.frames_count % 3 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.take_hit and iteration % 4 == 0:
+        elif self.take_hit and self.frames_count % 2 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
@@ -376,11 +388,11 @@ class MartialHero(Player):
                     self.running()
                 else:
                     self.staying()
-        elif self.death and iteration % 3 == 0:
+        elif self.death and self.frames_count % 3 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
-        elif self.revive and iteration % 4 == 0:
+        elif self.revive and self.frames_count % 4 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
@@ -440,13 +452,13 @@ class Monster(Character):  # attack
                 self.up = True
                 self.move('UP')
                 self.movements.add('UP')
-        if self.stay and iteration % 2 == 0:
+        if self.stay and self.frames_count % 2 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.run and iteration % 2 == 0:
+        elif self.run and self.frames_count % 2 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
-        elif self.take_hit and iteration % 2 == 0:
+        elif self.take_hit and self.frames_count % 2 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
@@ -456,7 +468,7 @@ class Monster(Character):  # attack
                     self.running()
                 else:
                     self.staying()
-        elif self.death and iteration % 3 == 0:
+        elif self.death and self.frames_count % 3 == 0:
             if self.cur_frame != len(self.frames) - 1:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
                 self.image = self.frames[self.cur_frame]
@@ -496,6 +508,7 @@ class Demon(Monster):
         super().__init__(pos_x, pos_y, 'demon', (160, 144), 100)
 
 
+# BULLET
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, character, ch_group, pos):
         super().__init__(all_sprites, bullets_group, ch_group)
@@ -517,6 +530,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y += self.speed_y
 
 
+# CAMERA
 class Camera:
     def __init__(self):
         self.dx = 0
@@ -531,6 +545,7 @@ class Camera:
         self.dy = -(target.rect.y + target.rect.h // 2 - HEIGHT // 2)
 
 
+# IMAGE LOADING
 def load_image(name, color_key=None):
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
@@ -545,6 +560,7 @@ def load_image(name, color_key=None):
     return image
 
 
+# LEVEL LOADING AND GENERATING
 def load_level(filename):
     filename = "data/" + filename
     try:
@@ -602,6 +618,7 @@ def terminate():
     sys.exit()
 
 
+# NON MAIN SCREENS
 def menu():
     global WIDTH, HEIGHT
     intro_text = ["{Название игры придумать}", "",
@@ -728,6 +745,7 @@ def game_over():
         clock.tick(FPS)
 
 
+# MAIN GAME
 if __name__ == '__main__':
     # INITIALIZATION
     pygame.init()
@@ -982,6 +1000,7 @@ if __name__ == '__main__':
     # GAME BEGIN
     keys = set()
     while True:
+        # LEVEL CHANGING ACCORDING TO KILL COUNT
         if TOTAL_COUNT == NEXT_LEVEL and NEXT_LEVEL != 20:
             NEXT_LEVEL += 10
             MAP_NUM += 1
@@ -1014,6 +1033,7 @@ if __name__ == '__main__':
                         player.staying()
                         player.stop_attack()
         if not pause:
+            # event checking
             for event in pygame.event.get():
                 # quit checking
                 if event.type == pygame.QUIT:
@@ -1082,6 +1102,7 @@ if __name__ == '__main__':
                         player.flip()
                     elif not player.is_flipped() and x < player.rect.x + player.rect.w // 2:
                         player.flip()
+                # player exposing window checking
                 if event.type == pygame.WINDOWEXPOSED:
                     WIDTH = screen.get_width()
                     HEIGHT = screen.get_height()
@@ -1109,6 +1130,7 @@ if __name__ == '__main__':
             characters_group.draw(screen)
             iteration += 1
 
+            # printing kill and lives count
             TOTAL_COUNT = Monster.total
             font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 30)
             string_total = font.render(f'KILLS: {TOTAL_COUNT}', True, pygame.Color('white'))
@@ -1118,6 +1140,7 @@ if __name__ == '__main__':
             screen.blit(pause_image, (WIDTH - pause_image.get_width(),
                                       0, WIDTH, pause_image.get_height()))
 
+            # game over with player death
             if not player.is_alive() and not player.has_lives() and iteration % (FPS * 3) == 0:
                 game_over()
 
