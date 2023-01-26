@@ -1,7 +1,199 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="первая версия" />
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="первая версия">
+      <change afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/Analysis-00.toc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/EXE-00.toc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/PKG-00.toc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/PYZ-00.pyz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/PYZ-00.toc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/base_library.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/game.exe.manifest" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/game.pkg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/warn-game.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/game/xref-game.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/accept.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/arrows.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/bar_empty.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/bar_empty_long.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/blue_bar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/button.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/button_sq.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/button_sq_hovered.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/button_sq_pressed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/cross.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/gray.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/home.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/light_blue_bar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/pause.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/pause_box.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/player_sheet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/red_bar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/sheet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/GUI/yellow_bar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/box.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/demon/demon_attack_no_breath.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/demon/demon_breath.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/demon/demon_fire_breath.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/demon_attack_breath.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/demon_idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/evil_wizard/evil_wizard_fall.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/evil_wizard_attack1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/evil_wizard_attack2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/evil_wizard_death.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/evil_wizard_idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/evil_wizard_jump.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/evil_wizard_run.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/evil_wizard_take_hit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/fonts/DungeonFont.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/fonts/MinimalPixelLower.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/fonts/MinimalPixelUpper.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/ghost/ghost_appears.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/ghost/ghost_shriek.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/ghost/ghost_vanish.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/ghost_idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/goblin/goblin_attack1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/goblin/goblin_attack2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/goblin/goblin_attack3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/goblin/goblin_bomb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/goblin_death.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/goblin_idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/goblin_run.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/goblin_take_hit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/grass.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/map1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/map2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/map3.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/martial_hero/martial_hero_fall.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/martial_hero_attack1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/martial_hero_attack2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/martial_hero_death.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/martial_hero_idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/martial_hero_jump.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/martial_hero_run.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/martial_hero_take_hit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/menu.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/mushroom/mushroom_attack1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/mushroom/mushroom_attack2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/mushroom/mushroom_attack3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/mushroom/mushroom_projectile.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/mushroom_death.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/mushroom_idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/mushroom_run.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/mushroom_take_hit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/necromancer_sheet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/night_borne_sheet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/night_town_background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton/skeleton_attack1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton/skeleton_attack2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton/skeleton_attack3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton/skeleton_shield.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton/skeleton_sword_sprite.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton_death.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton_idle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton_run.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/skeleton_take_hit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/trash_monster/Run.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/trash_monster/death.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/trash_monster/idle.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/trash_monster/zattack.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/trash_monster_sheet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/data/users.sqlite" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/game.exe" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game.spec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/accept.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/arrows.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/bar_empty.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/bar_empty_long.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/blue_bar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/button.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/button_sq.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/button_sq_hovered.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/button_sq_pressed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/cross.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/gray.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/home.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/light_blue_bar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/pause.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/pause_box.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/player_sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/red_bar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/GUI/yellow_bar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/box.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/demon/demon_attack_no_breath.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/demon/demon_breath.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/demon/demon_fire_breath.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/demon_attack_breath.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/demon_idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/evil_wizard/evil_wizard_fall.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/evil_wizard_attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/evil_wizard_attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/evil_wizard_death.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/evil_wizard_idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/evil_wizard_jump.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/evil_wizard_run.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/evil_wizard_take_hit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/fonts/DungeonFont.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/fonts/MinimalPixelLower.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/fonts/MinimalPixelUpper.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ghost/ghost_appears.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ghost/ghost_shriek.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ghost/ghost_vanish.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ghost_idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/goblin/goblin_attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/goblin/goblin_attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/goblin/goblin_attack3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/goblin/goblin_bomb.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/goblin_death.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/goblin_idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/goblin_run.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/goblin_take_hit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/grass.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map3.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/martial_hero/martial_hero_fall.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/martial_hero_attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/martial_hero_attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/martial_hero_death.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/martial_hero_idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/martial_hero_jump.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/martial_hero_run.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/martial_hero_take_hit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/menu.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mushroom/mushroom_attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mushroom/mushroom_attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mushroom/mushroom_attack3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mushroom/mushroom_projectile.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mushroom_death.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mushroom_idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mushroom_run.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mushroom_take_hit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/necromancer_sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/night_borne_sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/night_town_background.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton/skeleton_attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton/skeleton_attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton/skeleton_attack3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton/skeleton_shield.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton/skeleton_sword_sprite.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton_death.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton_idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton_run.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/skeleton_take_hit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trash_monster/Run.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trash_monster/death.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trash_monster/idle.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trash_monster/zattack.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/trash_monster_sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/users.sqlite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,7 +209,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="alpha_version" />
+        <entry key="$PROJECT_DIR$" value="ab71a19e54f89777c68beb2893f9e6fe9d3a40b3" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -50,15 +242,15 @@
       <recent name="C:\Users\1\Desktop\Проект PyGame" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\1\Desktop\Проект PyGame" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data\GUI" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\data\fonts" />
       <recent name="C:\Users\1\Desktop\Проект PyGame\fonts" />
-      <recent name="C:\Users\1\Desktop\Проект PyGame" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.shitty_hack'n'slash">
-    <configuration name="shitty_hack'n'slash" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.game">
+    <configuration name="game" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Проект PyGame" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -70,7 +262,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/shitty_hack'n'slash.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\1\Desktop\Проект PyGame\game.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -102,11 +294,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.shitty_hack'n'slash" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.game" />
+        <item itemvalue="Python.game" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.shitty_hack'n'slash" />
-        <item itemvalue="Python.shitty_hack'n'slash" />
       </list>
     </recent_temporary>
   </component>
@@ -329,7 +521,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674727939535</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="первая версия">
+      <created>1674728744755</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1674728744755</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

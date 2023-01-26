@@ -1,0 +1,32 @@
+{
+  "button": {
+    "colours": {
+      "normal_text": "white"
+    },
+    "font": {
+      "name": "PixelFont",
+      "size": "30",
+      "bold": "0",
+      "italic": "0",
+      "regular_path": "data/fonts/MinimalPixelLower.ttf",
+      "bold_path": "data/fonts/MinimalPixelLower.ttf",
+      "italic_path": "data/fonts/MinimalPixelLower.ttf",
+      "bold_italic_path": "data/fonts/MinimalPixelLower.ttf"
+    },
+    "misc": {
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "20",
+      "border_width": "1",
+      "shadow_width": "1",
+      "tool_tip_delay": "1.0",
+      "text_horiz_alignment": "center",
+      "text_vert_alignment": "center",
+      "text_horiz_alignment_padding": "10",
+      "text_vert_alignment_padding": "5",
+      "state_transitions": {
+        "normal_hovered": "0.5",
+        "hovered_normal": "0.5"
+      }
+    }
+  }
+}
