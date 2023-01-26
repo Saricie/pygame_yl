@@ -1,8 +1,11 @@
 {
   "button": {
+    "colours": {
+      "normal_text": "white"
+    },
     "font": {
       "name": "PixelFont",
-      "size": "26",
+      "size": "30",
       "bold": "0",
       "italic": "0",
       "regular_path": "data/fonts/MinimalPixelLower.ttf",
@@ -23,12 +26,6 @@
       "state_transitions": {
         "normal_hovered": "0.5",
         "hovered_normal": "0.5"
-      }
-    },
-    "images": {
-      "normal_image": {
-        "package": "data.GUI",
-        "resource": "button.png"
       }
     }
   }

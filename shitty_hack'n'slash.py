@@ -634,34 +634,19 @@ def terminate():
 # NON MAIN SCREENS
 def menu():
     global WIDTH, HEIGHT
-    intro_text = ["{Название игры придумать}", "",
-                  "", "Press Space to begin"]
     manager = pygame_gui.UIManager((WIDTH, HEIGHT), os.path.join('data', 'menu.json'))
     menu_background = pygame.transform.scale(load_image('night_town_background.png'), (WIDTH, HEIGHT))
     screen.blit(menu_background, (0, 0))
     font = pygame.font.Font(os.path.join("data", "fonts", "MinimalPixelLower.ttf"), 30)
-    text_coord = 50
-    for line in intro_text:
-        string_rendered = font.render(line, True, pygame.Color('white'))
-        intro_rect = string_rendered.get_rect()
-        text_coord += 10
-        intro_rect.top = text_coord
-        intro_rect.x = 10
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
+    screen.blit(font.render("Press Space to begin", True, pygame.Color('white')), (10, 10, 100, 20))
     start_btn = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect((WIDTH // 2 - 75, HEIGHT // 3 - 25), (150, 50)),
-        text='Начать игру',
-        manager=manager
-    )
-    records_btn = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect((WIDTH // 2 - 75, HEIGHT // 2 - 25), (150, 50)),
-        text='Рекорды',
+        relative_rect=pygame.Rect((WIDTH // 2 - 150, HEIGHT // 3 - 25), (300, 50)),
+        text='Start game',
         manager=manager
     )
     exit_btn = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect((WIDTH // 2 - 75, HEIGHT // 2 + 125), (150, 50)),
-        text='Выход',
+        relative_rect=pygame.Rect((WIDTH // 2 - 150, HEIGHT // 2 + 125), (300, 50)),
+        text='Exit',
         manager=manager
     )
     while True:
@@ -680,12 +665,10 @@ def menu():
                 if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == start_btn:
                         return None
-                    if event.ui_element == records_btn:
-                        # show_records()
-                        ...
                     if event.ui_element == exit_btn:
                         terminate()
             manager.process_events(event)
+        screen.blit(font.render("Press Space to begin", True, pygame.Color('white')), (10, 10, 100, 20))
         manager.update(FPS / 1000)
         manager.draw_ui(screen)
         pygame.display.flip()
