@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="первая версия" />
+    <list default="true" id="5ce4c94e-a33d-4daa-9af6-18dd43f95999" name="Changes" comment="первая версия">
+      <change afterPath="$PROJECT_DIR$/data/map3.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/users.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shitty_hack'n'slash.py" beforeDir="false" afterPath="$PROJECT_DIR$/shitty_hack'n'slash.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,7 +24,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="menu" />
+        <entry key="$PROJECT_DIR$" value="alpha_version" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -104,6 +111,9 @@
       <list>
         <item itemvalue="Python.shitty_hack'n'slash" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.shitty_hack'n'slash" />
+        <item itemvalue="Python.shitty_hack'n'slash" />
       </list>
     </recent_temporary>
   </component>
@@ -305,7 +315,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673870447991</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="первая версия">
+      <created>1674725561402</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1674725561402</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

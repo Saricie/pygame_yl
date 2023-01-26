@@ -978,7 +978,7 @@ if __name__ == '__main__':
     en_bullets_group = pygame.sprite.Group()
 
     # LOADING MAP AND PLAYER INITIALIZATION
-    level_map, max_width, max_height = load_level('map1.txt')
+    level_map, max_width, max_height = load_level('map3.txt')
 
     # CONSTANTS
     TILE_WIDTH = TILE_HEIGHT = 50
@@ -1014,7 +1014,7 @@ if __name__ == '__main__':
     keys = set()
     while True:
         # LEVEL CHANGING ACCORDING TO KILL COUNT
-        if TOTAL_COUNT == NEXT_LEVEL and NEXT_LEVEL != 20:
+        if TOTAL_COUNT == NEXT_LEVEL and NEXT_LEVEL != 30:
             NEXT_LEVEL += 10
             MAP_NUM += 1
             for s in all_sprites:
