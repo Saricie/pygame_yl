@@ -280,9 +280,6 @@ class Player(Character):
                 else:
                     self.change_animation(self.sheet_revive_f, self.revive_w, self.revive_h, True)
 
-    def disabled(self):
-        self.timer = 10
-
     def update(self):
         super().update()
         if self.timer:
@@ -360,20 +357,6 @@ class MartialHero(Player):
             for m in monsters_group:
                 if m.is_alive() and pygame.sprite.collide_mask(self, m):
                     self.taking_hit()
-                    self.disabled()
-                    if self.rect.x <= m.rect.x:
-                        self.rect.x -= 20
-                        m.rect.x += 20
-                    elif self.rect.x > m.rect.x:
-                        self.rect.x += 20
-                        m.rect.x -= 20
-                    if self.rect.y <= m.rect.y:
-                        self.rect.y -= 20
-                        m.rect.y += 20
-                    elif self.rect.y > m.rect.y:
-                        self.rect.y += 20
-                        m.rect.y -= 20
-                    break
         if self.attack:
             if self.frames_count % 3 == 0:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames)
